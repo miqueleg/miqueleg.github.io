@@ -1,14 +1,12 @@
-# Remember UTF-8 id using notepad++
 - title: General Information
   type: map
   contents:
     - name: Full Name
-      value: Miquel Estévez-Gay
+      value: Miquel Esté¶¥z-Gay
     - name: Date of Birth
       value: 11th October 1994
     - name: Languages
-      value: English, Català, Español
-
+      value: English, Català¬ Españ¯¬Š
 - title: Education
   type: time_table
   contents:
