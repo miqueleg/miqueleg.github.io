@@ -10,7 +10,7 @@ I'm excited to share my latest computational tool for the molecular modeling com
 
 🔬 Why it matters: Accurate protonation states are critical for reliable molecular dynamics (MD) simulations, yet they're often overlooked. Incorrect assignments can lead to artifacts or misleading results, particularly with histidine residues that can exist in multiple tautomeric forms for the same pH conditions.
 
-### ⚡ Key features:
+#### ⚡ Key features:
 Integrates PropKa3 for pKa predictions and initial state assignments.
 Employs xTB semi-empirical quantum chemistry calculations to determine energetically favorable protonation states.
 Handles both HID (δ-protonated) and HIE (ε-protonated) histidine tautomers with QM accuracy.
@@ -19,6 +19,9 @@ Provides detailed energy reports and automatically generates optimized PDB files
 ### 🔗 Check it out: [Protonation-Optimizer](https://github.com/miqueleg/protonation-optimizer/tree/main "Protonation State Optimizer")
 
 Feel free to use it and let me know how it went!
+
+
+
 
 # Protonation State Optimizer
 
@@ -61,7 +64,7 @@ This tool is particularly useful for preparing protein structures for molecular 
 
 4. Install PropKa3
    
-5. Clone this repository:
+5. Clone the repository:
 ```
 git clone https://github.com/miqueleg/protonation-optimizer
 ```
