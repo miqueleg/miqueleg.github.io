@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/repositories/";
           },
-        },{id: "post-a-post-with-plotly-js",
+        },{id: "post-protonation-optimizer",
+        
+          title: "Protonation Optimizer",
+        
+        description: "Announcement of 200~Protonation Optimizer",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/Protonation-Optimizer/";
+          
+        },
+      },{id: "post-a-post-with-plotly-js",
         
           title: "a post with plotly.js",
         
