@@ -34,6 +34,17 @@ ninja.data = [{
         
           title: "Protonation Optimizer",
         
+        description: "Announcement of QMMESP.py",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/QMMESP/";
+          
+        },
+      },{id: "post-protonation-optimizer",
+        
+          title: "Protonation Optimizer",
+        
         description: "Announcement of 200~Protonation Optimizer",
         section: "Posts",
         handler: () => {
