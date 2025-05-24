@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='iqcc.udg.edu/2023/09/12/phd-defense-miquel-estevez-gay/'>PhD in Bioinformatics</a>. <a href='https://www.osunalab.com/our-team/'>Lab manager at OsunaLab</a>
+subtitle: <a href='iqcc.udg.edu/2023/09/12/phd-defense-miquel-estevez-gay/'>PhD in Bioinformatics</a>.<p></p>Ex. <a href='https://www.osunalab.com/our-team/'>Lab manager at OsunaLab</a>
 
 profile:
   align: right
