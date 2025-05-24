@@ -30,9 +30,9 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/repositories/";
           },
-        },{id: "post-protonation-optimizer",
+        },{id: "post-qmmesp-environment-aware-resp-charges-of-ligands",
         
-          title: "Protonation Optimizer",
+          title: "QMMESP. Environment-aware RESP charges of ligands",
         
         description: "Announcement of QMMESP.py",
         section: "Posts",
