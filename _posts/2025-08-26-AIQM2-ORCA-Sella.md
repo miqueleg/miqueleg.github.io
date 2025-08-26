@@ -16,7 +16,7 @@ I recently uploaded a set of utilities that combine the **AIQM2** machine-learni
 
 Below is a SCAN-driven optimization example. The plot shows the energy evolution over optimization cycles.
 
-![ORCA TS Optimization Progress]({{ '/assets/img/scan_ts_progress.svg' | relative_url }})
+![ORCA TS Optimization Progress]({{ '/assets/img/SCAN.png' | relative_url }})
 
 #### Interactive trajectory
 
