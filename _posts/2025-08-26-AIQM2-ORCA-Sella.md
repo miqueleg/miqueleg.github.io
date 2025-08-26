@@ -22,24 +22,28 @@ Below is a SCAN-driven optimization example. The plot shows the energy evolution
 
 Use the slider to browse individual frames from the SCAN trajectory.
 
-<div id="scan-viewer" style="width:100%; height:400px;"></div>
+<div id="scan-viewer" style="width:100%; height:400px; position:relative;"></div>
 <input type="range" id="frame-slider" min="0" value="0" style="width:100%">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.6/3Dmol-min.js"></script>
 <script>
-const viewer = $3Dmol.createViewer('scan-viewer', {backgroundColor: 'black'});
-fetch('{{ '/assets/xyz/output_traj.xyz' | relative_url }}')
-  .then(r => r.text())
-  .then(data => {
-    viewer.addModelsAsFrames(data, 'xyz');
-    viewer.setStyle({}, {stick:{radius:0.15}, sphere:{scale:0.3}});
-    viewer.zoomTo();
-    viewer.render();
-    const slider = document.getElementById('frame-slider');
-    slider.max = viewer.getModel(0).getNumFrames() - 1;
-    slider.oninput = () => {
-      viewer.setFrame(parseInt(slider.value));
-      viewer.render();
-    };
+document.addEventListener('DOMContentLoaded', () => {
+  const viewer = $3Dmol.createViewer(document.getElementById('scan-viewer'), {
+    backgroundColor: 'black'
   });
+  fetch('{{ '/assets/xyz/output_traj.xyz' | relative_url }}')
+    .then(r => r.text())
+    .then(data => {
+      viewer.addModelsAsFrames(data, 'xyz');
+      viewer.setStyle({}, {stick:{radius:0.15}, sphere:{scale:0.3}});
+      viewer.zoomTo();
+      viewer.render();
+      const slider = document.getElementById('frame-slider');
+      slider.max = viewer.getModel(0).getNumFrames() - 1;
+      slider.oninput = () => {
+        viewer.setFrame(parseInt(slider.value));
+        viewer.render();
+      };
+    });
+});
 </script>
