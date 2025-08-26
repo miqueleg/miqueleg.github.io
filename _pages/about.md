@@ -1,8 +1,8 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
-subtitle: <a href='iqcc.udg.edu/2023/09/12/phd-defense-miquel-estevez-gay/'>PhD in Bioinformatics</a>.<p></p>Ex. <a href='https://www.osunalab.com/our-team/'>Lab manager at OsunaLab</a>
+subtitle: <a href='https://iqcc.udg.edu/2023/09/12/phd-defense-miquel-estevez-gay/'>PhD in Bioinformatics</a>.<p></p>Ex. <a href='https://www.osunalab.com/our-team/'>Lab manager at OsunaLab</a>
 
 profile:
   align: right
@@ -21,5 +21,6 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-Biologist, Molecular Biologist and Bioinformatician. Designing Proteins computationaly and making my own tools to do so. 
-Plant Lover, in fact is my main focus of my <a href='https://www.instagram.com/miquelgarden'>Instagram account</a>.
+Biologist, molecular biologist and bioinformatician. Designing proteins computationally and building my own tools to do so.
+
+Plant lover; it's the main focus of my <a href='https://www.instagram.com/miquelgarden'>Instagram account</a>.
