@@ -16,14 +16,14 @@ I recently uploaded a set of utilities that combine the **AIQM2** machine-learni
 
 Below is a SCAN-driven optimization example. The plot shows the energy evolution over optimization cycles.
 
-![ORCA TS Optimization Progress]({{ '/assets/img/SCAN.png' | relative_url }})
+<img src="{{ '/assets/img/SCAN.png' | relative_url }}" alt="ORCA TS Optimization Progress" style="width:80%;height:auto;display:block;margin:0 auto;" />
 
 #### Interactive trajectory
 
 Use the slider to browse individual frames from the SCAN trajectory.
 
 <div id="scan-viewer" style="width:100%; height:400px; position:relative;"></div>
-<input type="range" id="frame-slider" min="0" value="0" style="width:100%">
+<input type="range" id="frame-slider" min="0" value="0" style="width:120%">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.0.6/3Dmol-min.js"></script>
 <script>
