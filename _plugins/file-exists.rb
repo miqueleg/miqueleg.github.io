@@ -11,12 +11,13 @@ module Jekyll
 
       # Adds the site source, so that it also works with a custom one
       site_source = context.registers[:site].config['source']
-      file_path = site_source + '/' + url
+      file_path = File.join(site_source, url).strip
 
       # Check if file exists (returns true or false)
-      "#{File.exist?(file_path.strip!)}"
+      "#{File.exist?(file_path)}"
     end
   end
 end
 
 Liquid::Template.register_tag('file_exists', Jekyll::FileExistsTag)
+
