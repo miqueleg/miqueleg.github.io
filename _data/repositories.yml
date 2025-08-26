@@ -6,3 +6,5 @@ repo_description_lines_max: 2
 github_repos:
   - miqueleg/histidine-protonation-optimizer
   - miqueleg/QMMESP
+  - miqueleg/orca-scan-minimization
+  - miqueleg/sella-ts-search
