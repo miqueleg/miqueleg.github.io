@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/repositories/";
           },
-        },{id: "post-qmmesp-environment-aware-resp-charges-of-ligands",
+        },{id: "post-aiqm2-geometry-optimization-with-orca-scan-and-sella",
+        
+          title: "AIQM2 Geometry Optimization with ORCA, SCAN and Sella",
+        
+        description: "Overview of new AIQM2-based projects for structure minimization and transition-state searches",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/AIQM2-ORCA-Sella/";
+          
+        },
+      },{id: "post-qmmesp-environment-aware-resp-charges-of-ligands",
         
           title: "QMMESP. Environment-aware RESP charges of ligands",
         
