@@ -1,6 +1,6 @@
 ---
 layout: post
-title: AIQM2 Geometry Optimization with: ORCA Opt, SCAN, and Sella TS search
+title: AIQM2 Geometry Optimization with ORCA Opt, SCAN, and Sella TS search
 date: 2025-08-26 12:00:00
 description: Overview of new AIQM2-based projects for structure minimization and transition-state searches
 tags: aiqm2 orca scan sella quantum-chemistry DFT semiempirical
