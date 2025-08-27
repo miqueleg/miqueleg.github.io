@@ -30,15 +30,15 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/repositories/";
           },
-        },{id: "post-aiqm2-geometry-optimization-with-orca-scan-and-sella",
+        },{id: "post-",
         
-          title: "AIQM2 Geometry Optimization with ORCA, SCAN and Sella",
+          title: "",
         
-        description: "Overview of new AIQM2-based projects for structure minimization and transition-state searches",
+        description: "",
         section: "Posts",
         handler: () => {
           
-            window.location.href = "/blog/2025/AIQM2-ORCA-Sella/";
+            window.location.href = "/blog/2025/2025-08-26-AIQM2-ORCA-Sella/";
           
         },
       },{id: "post-qmmesp-environment-aware-resp-charges-of-ligands",
