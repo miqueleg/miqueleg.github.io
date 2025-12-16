@@ -11,6 +11,7 @@ profile:
   more_info: >
     <p></p>
     <p>Girona, Spain</p>
+    <p>Bern, Switzerland</p>
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
@@ -20,7 +21,7 @@ latest_posts:
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
-
-Biologist, molecular biologist and bioinformatician. Designing proteins computationally and building my own tools to do so.
+<p></p>
+Designing proteins computationally and building my own tools to do so. 
 
 Plant lover; it's the main focus of my <a href='https://www.instagram.com/miquelgarden'>Instagram account</a>.
