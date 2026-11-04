@@ -80,11 +80,12 @@ Optional repository secret: `OPENALEX_API_KEY` (free at openalex.org) for more r
 
 | File | Built by | From |
 | --- | --- | --- |
-| `public/data/hhec.json` | `scripts/data/anm_hhec.py 1pwz.pdb public/data/hhec.json` | PDB 1PWZ, elastic-network mode for the hero |
+| `public/data/hero.json` | `scripts/data/hero_hhec.py 1zmt.pdb output_traj.xyz public/data/hero.json` | HheC tetramer (PDB 1ZMT) with its lowest elastic-network mode, plus the full 303-atom scan superposed on every active site by C-alpha atoms |
 | `public/data/scan-path.json` | `scripts/data/scan_to_json.py traj.xyz public/data/scan-path.json` | ORCA relaxed-scan trajectory (multi-frame xyz with `E` in each comment line) |
 | `public/data/structures/*.pdb` | `scripts/data/trim_pdb.py in.pdb out.pdb A[,B] [HET,...]` | any PDB; keeps chosen chains, drops waters and H |
 
 `scan_to_json.py` has the atom indices for the readouts (`TRACK`) and the highlighted groups (`atoms`) at the top; change them for a different system.
+`hero_hhec.py` maps the cluster's C-alpha caps to HheC residues in `CAPS`; the full trajectory (`output_traj.xyz`) is in the git history at commit 6f2b6b1.
 
 ## Deployment
 

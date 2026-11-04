@@ -4,27 +4,35 @@ import { site } from "../data/site";
 
 <div class="hero">
   <div>
-    <p class="eyebrow">Computational enzymology · {site.lab.name}, University of Bern</p>
+    <p class="eyebrow">Computational enzymology · method development</p>
     <h1>
       <span class="small">From</span>{" "}<span class="w e">electrons<sup>10⁻¹⁰ m</sup></span><br /><span class="small">to</span>{" "}<span
         class="w z">enzymes<sup>10⁻⁸ m</sup></span>
     </h1>
     <p class="lede">
-      I simulate enzymes at every scale, from quantum chemistry and QM/MM to molecular dynamics, and use what the simulations show to
-      redesign them.
+      <strong>Multiscale enzyme design</strong>, from <strong>mechanistic</strong> to <strong>conformational</strong>: I work out how enzymes
+      catalyse their reactions and how they move,{" "}<strong>develop the methods</strong> to simulate both, and use what I learn to redesign
+      them.
     </p>
     <div class="cta">
       <a class="btn" href="#scales">Follow the scales ↓</a>
-      <a class="btn ghost" href="/tools/">Open-source tools</a>
+      <a class="btn ghost" href="/methods/">Methods I develop</a>
     </div>
   </div>
   <figure class="mol-fig">
-    <div class="mol" id="hero-mol" role="img" aria-label="3D cartoon of the halohydrin dehalogenase HheC dimer with its catalytic triad and bound (R)-styrene oxide, gently flexing">
+    <div
+      class="mol"
+      id="hero-mol"
+      role="img"
+      aria-label="3D cartoon of the HheC tetramer flexing along its lowest elastic-network mode, with a quantum-chemical cluster model in each of the four active sites in which cyanide opens an epoxide, each reacting on its own clock"
+    >
       <div class="mol-fallback" id="hero-fallback">Loading HheC…</div>
+      <div class="mol-layer" id="hero-qm"></div>
     </div>
     <figcaption class="mono">
-      <span><b>HheC</b> · PDB 1PWZ · (R)-styrene oxide + Cl⁻ · Ser132 / Tyr145 / Arg149</span>
-      <span>Motion: lowest elastic-network mode · drag to rotate</span>
+      <span class="legend-dark"><span><b>MM scale</b> · HheC tetramer, PDB 1ZMT · lowest elastic-network mode ·</span><span>monomers <i style="background:#8FB0FF"></i><i style="background:#5CC8B5"></i><i style="background:#B394F0"></i><i style="background:#E8A0BF"></i></span></span>
+      <span><b>QM scale</b> · AIQM2 cluster model in each active site, drawn through the protein: cyanide opens the epoxide</span>
+      <span class="legend-dark"><i style="background:#F0695E"></i>CN⁻ <i style="background:#FFFFFF"></i>epoxide <i style="background:#86A6FF"></i>proton relay <i class="dash"></i>bond breaking / forming</span>
     </figcaption>
   </figure>
 </div>
@@ -35,56 +43,223 @@ import { site } from "../data/site";
 </dl>
 
 <script>
-  import { createViewer, whileVisible } from "../scripts/mol";
+  // Data: public/data/hero.json, built by scripts/data/hero_hhec.py.
+  // Two linked 3Dmol viewers: the opaque protein below, the QM clusters on a transparent
+  // layer above so they stay visible inside the protein. Models are single frames whose
+  // coordinates are rewritten in place; setFrame(0) makes 3Dmol rebuild them.
+  import { createViewer, hasWebGL, whileVisible } from "../scripts/mol";
   import { reduceMotion } from "../scripts/theme";
 
-  const el = document.getElementById("hero-mol")!;
-  const fallback = document.getElementById("hero-fallback");
+  type Site = { chain: string; R: number[]; t: number[]; disp: number[] };
+  type Hero = {
+    protein: { ss: string[]; chain: string; resi: number[]; resn: string[]; xyz: number[]; disp: number[] };
+    cluster: {
+      elements: string[];
+      frames: number[][];
+      bonds: number[][];
+      dynamic: [number, number, string][];
+      partial: [number, number, number][];
+      cyanide: number[];
+      epoxide: number[];
+      relay: number[];
+      sites: Site[];
+    };
+  };
 
-  // Build a breathing trajectory along the ANM mode, then hand it to 3Dmol as frames.
+  const AMP = 1.8; // Å RMS per residue at the turning points
+  const PERIOD = 6; // s per breathing cycle
+  const FORWARD = 45, BACK = 30; // ms per scan frame
+  const FLASH = 550; // ms an atom stays highlighted after one of its bonds breaks or forms
+  const EVENT = "#FFD166";
+  // one hue per monomer, kept clear of the QM overlay's red / white / blue / amber
+  const CHAIN_COLOURS: Record<string, string> = { A: "#8FB0FF", B: "#5CC8B5", C: "#B394F0", D: "#E8A0BF" };
+
+  const el = document.getElementById("hero-mol")!;
+  const layer = document.getElementById("hero-qm")!;
+  const fallback = document.getElementById("hero-fallback");
+  const pad = (s: string | number, n: number) => String(s).padStart(n, " ");
+  const rand = (a: number, b: number) => a + Math.random() * (b - a);
+
+  function proteinPDB(p: Hero["protein"]) {
+    const names = ["N", "CA", "C", "O"];
+    let out = p.ss.join("\n") + "\nMODEL        1\n", k = 0;
+    p.resi.forEach((r, i) =>
+      names.forEach((nm) => {
+        const [x, y, z] = p.xyz.slice(3 * k, 3 * k + 3);
+        k++;
+        out += `ATOM  ${pad(k, 5)}  ${nm.padEnd(3)} ${p.resn[i]} ${p.chain[i]}${pad(r, 4)}    ${pad(x.toFixed(3), 8)}${pad(y.toFixed(3), 8)}${pad(z.toFixed(3), 8)}  1.00  0.00           ${nm[0]}\n`;
+      }),
+    );
+    return out + "ENDMDL\n";
+  }
+
+  function clusterSDF(c: Hero["cluster"]) {
+    const bonds = [...c.bonds, ...c.dynamic.filter((d) => d[2][0] === "1").map((d) => [d[0], d[1]])];
+    let out = `cluster\n  hero\n\n${pad(c.elements.length, 3)}${pad(bonds.length, 3)}  0  0  0  0  0  0  0  0999 V2000\n`;
+    c.elements.forEach((e) => (out += `    0.0000    0.0000    0.0000 ${e.padEnd(3)} 0  0  0  0  0  0  0  0  0  0  0  0\n`));
+    bonds.forEach(([a, b]) => (out += `${pad(a + 1, 3)}${pad(b + 1, 3)}  1  0\n`));
+    return out + "M  END\n$$$$\n";
+  }
+
   async function start() {
-    const [v, data] = await Promise.all([createViewer(el, fallback), fetch("/data/hhec.json").then((r) => r.json())]);
-    if (!v) return;
-    const lines: string[] = data.pdb.split("\n");
-    const head = lines.filter((l) => l.startsWith("HELIX") || l.startsWith("SHEET")).join("\n");
-    const atoms = lines.filter((l) => l.startsWith("ATOM") || l.startsWith("HETATM"));
-    const base = atoms.map((l) => [l.slice(30, 38), l.slice(38, 46), l.slice(46, 54)].map(parseFloat));
-    const f8 = (x: number) => x.toFixed(3).padStart(8, " ");
-    const NF = reduceMotion ? 1 : 24, AMP = 1.8;
-    let pdb = head + "\n";
-    for (let f = 0; f < NF; f++) {
-      const s = AMP * Math.sin((2 * Math.PI * f) / NF);
-      pdb += `MODEL     ${String(f + 1).padStart(4, " ")}\n`;
-      for (let i = 0; i < atoms.length; i++) {
-        const d = data.disp, b = base[i];
-        pdb += atoms[i].slice(0, 30) + f8(b[0] + s * d[3 * i]) + f8(b[1] + s * d[3 * i + 1]) + f8(b[2] + s * d[3 * i + 2]) + atoms[i].slice(54) + "\n";
-      }
-      pdb += "ENDMDL\n";
+    if (!hasWebGL()) {
+      if (fallback) fallback.textContent = "This 3D view needs WebGL, which is turned off in this browser.";
+      return;
     }
-    v.addModelsAsFrames(pdb, "pdb");
-    v.setStyle({ chain: "A" }, { cartoon: { color: "#9DB6FF", thickness: 0.5 } });
-    v.setStyle({ chain: "B" }, { cartoon: { color: "#4B5A78", thickness: 0.5 } });
-    const elem = (C: string, O: string, N = "#86A6FF") => ({ prop: "elem", map: { C, O, N } });
-    v.addStyle({ resi: [132, 145, 149], not: { atom: ["N", "C", "O"] } }, { stick: { radius: 0.24, colorscheme: elem("#E8EDF4", "#F0695E") } });
-    v.setStyle({ resn: "RSO" }, { stick: { radius: 0.22, colorscheme: elem("#F0695E", "#FFFFFF") }, sphere: { scale: 0.28, colorscheme: elem("#F0695E", "#FFFFFF") } });
-    v.setStyle({ resn: "CL" }, { sphere: { scale: 0.55, color: "#C7D2E2" } });
-    v.setViewStyle({ style: "outline", color: "#04060A", width: 0.035 });
-    v.zoomTo();
-    v.rotate(-70, "x");
-    v.rotate(20, "y");
-    v.zoom(1.12);
-    v.render();
+    const d: Hero = await fetch("/data/hero.json").then((r) => r.json());
+    const base = await createViewer(el, fallback);
+    const top = base && (await createViewer(layer, null));
+    if (!base || !top) return;
+    base.linkViewer(top);
+    top.linkViewer(base);
+    const p = d.protein, c = d.cluster, nres = p.resi.length, nat = c.elements.length, nframes = c.frames.length;
+
+    // ---------- protein (bottom layer) ----------
+    const P = base.addModelsAsFrames(proteinPDB(p), "pdb");
+    for (const ch of "ABCD") P.setStyle({ chain: ch }, { cartoon: { color: CHAIN_COLOURS[ch], thickness: 0.45 } });
+    const pAtoms = P.selectedAtoms({});
+    function setProtein(s: number) {
+      for (let r = 0; r < nres; r++)
+        for (let k = 0; k < 4; k++) {
+          const a = pAtoms[4 * r + k], o = 3 * (4 * r + k);
+          a.x = p.xyz[o] + s * p.disp[3 * r];
+          a.y = p.xyz[o + 1] + s * p.disp[3 * r + 1];
+          a.z = p.xyz[o + 2] + s * p.disp[3 * r + 2];
+        }
+      P.setFrame(0);
+    }
+
+    // ---------- QM clusters (top layer), each reacting on its own clock ----------
+    const cpk = (C: string) => ({ prop: "elem", map: { C, O: "#F0695E", N: "#86A6FF", H: "#FFFFFF" } });
+    const copies = c.sites.map((site) => ({
+      site,
+      M: top.addModelsAsFrames(clusterSDF(c), "sdf"),
+      atoms: [] as any[],
+      shapes: [] as any[],
+      f: Math.floor(rand(0, nframes)),
+      dir: Math.random() < 0.5 ? 1 : -1,
+      next: 0,
+      flash: new Map<number, number>(),
+      flashing: "",
+    }));
+    copies.forEach((cp) => (cp.atoms = cp.M.selectedAtoms({})));
+
+    function style(cp: (typeof copies)[number], now: number) {
+      const lit = [...cp.flash].filter(([, until]) => until > now).map(([i]) => i);
+      const key = lit.join(",");
+      if (key === cp.flashing && cp.flashing !== "init") return;
+      cp.flashing = key;
+      const M = cp.M;
+      M.setStyle({}, { stick: { radius: 0.2, colorscheme: cpk("#AEB8C8") } });
+      M.setStyle({ index: c.epoxide }, { stick: { radius: 0.32, colorscheme: cpk("#FFFFFF") }, sphere: { scale: 0.45, colorscheme: cpk("#FFFFFF") } });
+      M.setStyle({ index: c.relay }, { stick: { radius: 0.32, color: "#86A6FF" }, sphere: { scale: 0.5, color: "#86A6FF" } });
+      M.setStyle({ index: c.cyanide }, { stick: { radius: 0.32, color: "#F0695E" }, sphere: { scale: 0.5, color: "#F0695E" } });
+      if (lit.length) M.setStyle({ index: lit }, { stick: { radius: 0.34, color: EVENT }, sphere: { scale: 0.62, color: EVENT } });
+    }
+
+    const link = (atoms: any[], a: number, b: number, on: boolean) => {
+      const A = atoms[a], B = atoms[b], i = A.bonds.indexOf(b);
+      if (on && i < 0) {
+        A.bonds.push(b); A.bondOrder.push(1);
+        B.bonds.push(a); B.bondOrder.push(1);
+      } else if (!on && i >= 0) {
+        A.bonds.splice(i, 1); A.bondOrder.splice(i, 1);
+        const j = B.bonds.indexOf(a);
+        B.bonds.splice(j, 1); B.bondOrder.splice(j, 1);
+      }
+    };
+
+    function place(cp: (typeof copies)[number], s: number) {
+      const X = c.frames[cp.f], { R, t, disp } = cp.site, atoms = cp.atoms;
+      for (let i = 0; i < nat; i++) {
+        const x = X[3 * i], y = X[3 * i + 1], z = X[3 * i + 2], a = atoms[i];
+        a.x = x * R[0] + y * R[3] + z * R[6] + t[0] + s * disp[3 * i];
+        a.y = x * R[1] + y * R[4] + z * R[7] + t[1] + s * disp[3 * i + 1];
+        a.z = x * R[2] + y * R[5] + z * R[8] + t[2] + s * disp[3 * i + 2];
+      }
+      for (const [a, b, states] of c.dynamic) link(atoms, a, b, states[cp.f] === "1");
+      // dashed amber line for every bond caught half-way
+      cp.shapes.forEach((sh) => top.removeShape(sh));
+      cp.shapes = [];
+      for (const [a, b, dmax] of c.partial) {
+        const A = atoms[a], B = atoms[b];
+        if (A.bonds.includes(b) || Math.hypot(A.x - B.x, A.y - B.y, A.z - B.z) > dmax) continue;
+        cp.shapes.push(top.addCylinder({ start: { x: A.x, y: A.y, z: A.z }, end: { x: B.x, y: B.y, z: B.z }, radius: 0.1, color: EVENT, dashed: true, dashLength: 0.22, gapLength: 0.16, fromCap: 1, toCap: 1 }));
+      }
+      cp.M.setFrame(0);
+    }
+
+    // advance one copy's scan; flash the atoms whose bond state changed
+    function step(cp: (typeof copies)[number], now: number) {
+      const end = cp.dir > 0 ? nframes - 1 : 0;
+      if (cp.f === end) {
+        cp.dir = -cp.dir;
+        cp.next = now + (cp.dir < 0 ? rand(900, 1900) : rand(500, 1700)); // rest as product, then as reactant
+        return false;
+      }
+      const prev = cp.f;
+      cp.f += cp.dir;
+      cp.next = now + (cp.dir > 0 ? FORWARD : BACK);
+      for (const [a, b, states] of c.dynamic)
+        if (states[prev] !== states[cp.f]) {
+          cp.flash.set(a, now + FLASH);
+          cp.flash.set(b, now + FLASH);
+        }
+      return true;
+    }
+
+    setProtein(0);
+    copies.forEach((cp) => {
+      cp.flashing = "init";
+      style(cp, 0);
+      place(cp, 0);
+    });
+    top.setViewStyle({ style: "outline", color: "#04060A", width: 0.03 });
+    base.setViewStyle({ style: "outline", color: "#04060A", width: 0.03 });
+    top.zoomTo(); // sets the top layer's slab and fog; its view is then taken from the protein layer
+    base.zoomTo();
+    base.rotate(-60, "x");
+    base.zoom(1.1);
+    base.render();
+    top.render();
     if (reduceMotion) return;
-    let on = false;
+
+    // The tetramer cartoon is expensive to rebuild, so the protein updates at a rate set by how
+    // long its last rebuild took; each cluster steps on its own clock and follows the protein.
+    let on = false, raf = 0, s = 0, lastProtein = -1e9, cost = 40;
+    const loop = (now: number) => {
+      let moved = false;
+      if (now - lastProtein > Math.max(140, cost * 3)) {
+        s = AMP * Math.sin((2 * Math.PI * now) / 1000 / PERIOD);
+        setProtein(s);
+        const t0 = performance.now();
+        base.render();
+        cost = 0.8 * cost + 0.2 * (performance.now() - t0);
+        lastProtein = now;
+        moved = true;
+      }
+      let dirty = false;
+      for (const cp of copies) {
+        const stepped = now >= cp.next && step(cp, now);
+        const wasLit = cp.flashing;
+        style(cp, now);
+        if (stepped || moved || wasLit !== cp.flashing) {
+          place(cp, s);
+          dirty = true;
+        }
+      }
+      if (dirty) top.render();
+      if (on) raf = requestAnimationFrame(loop);
+    };
     whileVisible(el, (yes) => {
       if (yes === on) return;
       on = yes;
       if (yes) {
-        v.animate({ loop: "forward", interval: 75 });
-        v.spin("y", 0.35);
+        raf = requestAnimationFrame(loop);
+        base.spin("y", 0.3);
       } else {
-        v.stopAnimate();
-        v.spin(false);
+        cancelAnimationFrame(raf);
+        base.spin(false);
       }
     });
   }

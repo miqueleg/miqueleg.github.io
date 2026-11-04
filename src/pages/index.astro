@@ -37,9 +37,10 @@ const posts = (await getPosts()).slice(0, 3);
   <section class="block" id="tools">
     <div class="wrap">
       <div class="sec-head">
-        <p class="eyebrow">Open source</p>
-        <h2>Tools I built along the way</h2>
-        <a class="more" href="/tools/">All tools →</a>
+        <p class="eyebrow">Method development</p>
+        <h2>Methods I build for QM, QM/MM and MM</h2>
+        <p>The simulations above run on methods I wrote when the existing ones fell short: QM workflows with machine-learned potentials, QM/MM charge derivation and MM set-up. All are open source.</p>
+        <a class="more" href="/methods/">All methods →</a>
       </div>
       <div class="tools">
         {tools.slice(0, 6).map((t) => <ToolCard {...t} />)}

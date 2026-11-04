@@ -123,6 +123,11 @@ code, .mono { font-family: var(--mono); }
 .mol-fig { margin: 0; position: relative; min-width: 0; }
 .mol { position: relative; width: 100%; height: clamp(320px, 46vw, 540px); }
 .mol canvas { border-radius: 6px; }
+.mol-layer { position: absolute; inset: 0; z-index: 1; }
+.legend-dark { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.8rem; }
+.legend-dark i { display: inline-block; width: 0.7em; height: 0.7em; border-radius: 50%; margin-right: 0.3em; vertical-align: -0.05em; }
+.legend-dark i.dash { width: 1.5em; height: 0; border-radius: 0; border-top: 2px dashed #ffd166; vertical-align: 0.25em; }
+.lede strong { color: var(--stage-ink); font-weight: 600; }
 .mol-fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 1rem; color: var(--stage-mute); font-family: var(--mono); font-size: 0.8rem; }
 .mol-fig figcaption { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; justify-content: space-between; color: var(--stage-mute); border-top: 1px solid var(--stage-rule); padding-top: 0.6rem; margin-top: 0.4rem; }
 .mol-fig figcaption b { color: var(--stage-ink); font-weight: 500; }
@@ -151,6 +156,8 @@ section.block + section.block { padding-top: 0; }
 .ruler::before { content: ""; position: absolute; left: -6px; top: 0.35rem; width: 10px; height: 10px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); }
 .ruler .len { font-family: var(--display); font-weight: 800; font-variation-settings: "wdth" 120; font-size: 1.35rem; line-height: 1.1; }
 .ruler .len sup { font-size: 0.6em; }
+.ruler .lvl { align-self: flex-start; font-family: var(--mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; color: var(--paper); background: var(--ink); border-radius: 3px; padding: 0.05rem 0.4rem; margin-bottom: 0.35rem; }
+.links .lbl { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); align-self: center; }
 .ruler .time, .ruler .n { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-3); }
 .scale-copy { display: flex; flex-direction: column; gap: 0.7rem; min-width: 0; }
 .scale-copy h3 { font-size: 1.7rem; font-weight: 800; font-variation-settings: "wdth" 120; }
@@ -210,6 +217,7 @@ section.block + section.block { padding-top: 0; }
 .tool .stars { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .tool p { font-size: 0.95rem; color: var(--ink-2); }
 .tool .stack { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); margin-top: auto; }
+.tool .kind { margin-bottom: -0.15rem; }
 
 /* ---------- publications ---------- */
 .pubs { display: grid; border-top: 1px solid var(--rule); }

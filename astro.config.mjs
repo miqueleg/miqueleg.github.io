@@ -12,7 +12,8 @@ export default defineConfig({
   // keep the old al-folio URLs working
   redirects: {
     "/projects": "/research",
-    "/repositories": "/tools",
+    "/repositories": "/methods",
+    "/tools": "/methods",
     "/projects/protonation-optimizer": "/blog/2025/Protonation-Optimizer",
     "/projects/qmmesp": "/blog/2025/QMMESP",
     "/projects/aiqm2-orca-sella": "/blog/2025/AIQM2-ORCA-Sella",

@@ -2,7 +2,7 @@ export const site = {
   name: "Miquel Estévez-Gay",
   title: "Miquel Estévez-Gay · Computational enzymology",
   description:
-    "Computational enzymologist in the Buller Lab, University of Bern. Quantum chemistry, QM/MM and molecular dynamics for understanding and redesigning enzymes.",
+    "Computational enzymologist in the Buller Lab, University of Bern. Multiscale enzyme design, from mechanistic to conformational, and the methods to simulate both.",
   role: "Bioinformatician",
   lab: { name: "Buller Lab", url: "https://github.com/Buller-Lab" },
   place: "University of Bern, Switzerland",
@@ -19,7 +19,7 @@ export const site = {
 
 export const nav = [
   { href: "/research/", label: "Research" },
-  { href: "/tools/", label: "Tools" },
+  { href: "/methods/", label: "Methods" },
   { href: "/publications/", label: "Publications" },
   { href: "/blog/", label: "Blog" },
   { href: site.cv, label: "CV" },

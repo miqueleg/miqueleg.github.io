@@ -8,20 +8,20 @@ import ScanPath from "./ScanPath.astro";
       <p class="eyebrow">Research</p>
       <h2>Five scales, one enzyme</h2>
       <p>
-        Each method answers a question the others can't. The ruler on the left tracks length and time; the panels on the right run live
-        in your browser. Panels marked <span class="kind real">real data</span> play my own calculations; the others are schematics of
-        the method.
+        Quantum mechanics for the electrons, molecular mechanics for the protein, QM/MM to join them, and the methods I develop at each
+        level. The ruler on the left tracks length and time; the panels on the right run live in your browser. Panels marked{" "}<span
+          class="kind real">real data</span> play my own calculations; the others are schematics of the method.
       </p>
     </div>
     <ol class="scales">
       <li class="scale">
-        <div class="ruler"><span class="len">1 Å</span><span class="time">fs</span><span class="n">10–100 atoms</span></div>
+        <div class="ruler"><span class="lvl">QM</span><span class="len">1 Å</span><span class="time">fs</span><span class="n">10–100 atoms</span></div>
         <div class="scale-copy">
           <h3>Electrons</h3>
           <p class="method mono">DFT · xTB / g-xTB · ML potentials (AIQM2, MACE, UMA)</p>
           <p class="q">Where are the electrons, and where do they go when a bond breaks?</p>
           <p class="body-s">Semi-empirical and machine-learned potentials make it cheap enough to scan, optimise and search for transition states on hundreds of atoms, then check the key points with DFT.</p>
-          <p class="links"><a href="https://github.com/miqueleg/gxtb-pymol-interface">gxtb-pymol-interface</a><a href="https://github.com/miqueleg/MLatom-Sella-TS-search">MLatom-Sella-TS-search</a></p>
+          <p class="links"><span class="lbl">Methods I built</span><a href="https://github.com/miqueleg/gxtb-pymol-interface">gxtb-pymol-interface</a><a href="https://github.com/miqueleg/MLatom-Sella-TS-search">MLatom-Sella-TS-search</a></p>
         </div>
         <figure class="vis">
           <span class="kind">Schematic</span>
@@ -32,7 +32,7 @@ import ScanPath from "./ScanPath.astro";
       </li>
 
       <li class="scale">
-        <div class="ruler"><span class="len">10 Å</span><span class="time">fs–ps</span><span class="n">100–400 atoms</span></div>
+        <div class="ruler"><span class="lvl">QM</span><span class="len">10 Å</span><span class="time">fs–ps</span><span class="n">100–400 atoms</span></div>
         <div class="scale-copy">
           <h3>Active site</h3>
           <p class="method mono">QM cluster models · relaxed scans · TS search (Sella) · EVB</p>
@@ -42,7 +42,7 @@ import ScanPath from "./ScanPath.astro";
             epoxide carbon one step at a time. At the last step the epoxide C–O bond breaks and the catalytic tyrosine hands its proton to the
             leaving oxygen, while the arginine re-protonates the tyrosine.
           </p>
-          <p class="links"><a href="https://github.com/miqueleg/MLatom-ORCA-interface">MLatom-ORCA-interface</a><a href="/blog/2025/AIQM2-ORCA-Sella/">How the scan was run</a></p>
+          <p class="links"><span class="lbl">Methods I built</span><a href="https://github.com/miqueleg/MLatom-ORCA-interface">MLatom-ORCA-interface</a><a href="/blog/2025/AIQM2-ORCA-Sella/">how the scan was run</a></p>
         </div>
         <figure class="vis">
           <span class="kind real">Real data · 85 of 303 atoms shown</span>
@@ -51,13 +51,13 @@ import ScanPath from "./ScanPath.astro";
       </li>
 
       <li class="scale">
-        <div class="ruler"><span class="len">30 Å</span><span class="time">ps</span><span class="n">10⁴ atoms</span></div>
+        <div class="ruler"><span class="lvl">QM/MM</span><span class="len">30 Å</span><span class="time">ps</span><span class="n">10⁴ atoms</span></div>
         <div class="scale-copy">
           <h3>Protein environment</h3>
           <p class="method mono">QM/MM electrostatic embedding · environment-aware RESP</p>
           <p class="q">How does the enzyme polarise the substrate before anything reacts?</p>
           <p class="body-s">Charges fitted in the gas phase miss the field of the protein. Fitting them inside the enzyme, with the protein as point charges, gives ligand parameters that match where the ligand actually sits.</p>
-          <p class="links"><a href="https://github.com/miqueleg/QMMESP">QMMESP</a><a href="https://github.com/miqueleg/protonation-optimizer">protonation-optimizer</a></p>
+          <p class="links"><span class="lbl">Methods I built</span><a href="https://github.com/miqueleg/QMMESP">QMMESP</a><a href="https://github.com/miqueleg/protonation-optimizer">protonation-optimizer</a></p>
         </div>
         <figure class="vis">
           <span class="kind">Schematic · illustrative charges</span>
@@ -72,13 +72,14 @@ import ScanPath from "./ScanPath.astro";
       </li>
 
       <li class="scale">
-        <div class="ruler"><span class="len">100 Å</span><span class="time">ns–µs</span><span class="n">10⁵ atoms</span></div>
+        <div class="ruler"><span class="lvl">MM</span><span class="len">100 Å</span><span class="time">ns–µs</span><span class="n">10⁵ atoms</span></div>
         <div class="scale-copy">
           <h3>Dynamics</h3>
           <p class="method mono">MD (OpenMM, Amber) · enhanced sampling · MSMs · tunnel analysis</p>
           <p class="q">Which conformations does the enzyme visit, and which ones are active?</p>
           <p class="body-s">Long simulations, projected onto a few collective variables, show which states an enzyme samples and how mutations shift the balance, such as the flexible N-terminal loop that controls HheG's activity and enantioselectivity.</p>
-          <p class="links"><a href="https://github.com/miqueleg/MDTunnel">MDTunnel</a><a href="https://doi.org/10.1021/acscatal.4c04815">HheG loop paper</a></p>
+          <p class="links"><span class="lbl">Methods I built</span><a href="https://github.com/miqueleg/MDTunnel">MDTunnel</a></p>
+          <p class="links"><span class="lbl">Paper</span><a href="https://doi.org/10.1021/acscatal.4c04815">HheG loop</a></p>
         </div>
         <figure class="vis">
           <span class="kind">Schematic · toy landscape</span>
@@ -89,13 +90,13 @@ import ScanPath from "./ScanPath.astro";
       </li>
 
       <li class="scale">
-        <div class="ruler"><span class="len">20<sup>N</sup></span><span class="time">sequence space</span><span class="n">N = 254 residues</span></div>
+        <div class="ruler"><span class="lvl">Design</span><span class="len">20<sup>N</sup></span><span class="time">sequence space</span><span class="n">N = 254 residues</span></div>
         <div class="scale-copy">
           <h3>Design</h3>
           <p class="method mono">AlphaFold ensembles · LigandMPNN · BindCraft · Boltz-2</p>
           <p class="q">Which positions should we change, and to what?</p>
           <p class="body-s">Simulations point to the residues that matter; design tools and the lab test what to put there. In HheC, the single change F12Y in sequence motif 1 raised specific activity up to 5-fold and the apparent melting temperature by 10 K.</p>
-          <p class="links"><a href="https://doi.org/10.1021/acscatal.5c00819">HheC motif 1 paper</a><a href="https://doi.org/10.1002/pro.4426">AlphaFold2 ensembles paper</a></p>
+          <p class="links"><span class="lbl">Papers</span><a href="https://doi.org/10.1021/acscatal.5c00819">HheC motif 1</a><a href="https://doi.org/10.1002/pro.4426">AlphaFold2 ensembles</a></p>
         </div>
         <figure class="vis">
           <span class="kind real">Real sequence · HheC</span>

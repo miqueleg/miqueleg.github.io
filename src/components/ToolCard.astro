@@ -3,14 +3,16 @@ interface Props {
   name: string;
   url: string;
   blurb: string;
+  level: string;
   stack: string;
   stars: number;
   post?: string;
 }
-const { name, url, blurb, stack, stars, post } = Astro.props;
+const { name, url, blurb, level, stack, stars, post } = Astro.props;
 ---
 
 <article class="tool">
+  <span class="kind real">{level}</span>
   <header>
     <h3><a href={url}>{name}</a></h3>
     <span class="stars">{stars > 0 ? `★ ${stars}` : ""}</span>
