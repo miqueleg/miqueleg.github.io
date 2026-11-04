@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Scales from "../../components/Scales.astro";
+import PaperCard from "../../components/PaperCard.astro";
+import { selected } from "../../data/pubs";
+
+// Case studies are Markdown files in src/content/research/ (see README); papers without one link to the DOI.
+const cases = (await getCollection("research")).sort((a, b) => a.data.order - b.data.order);
+const caseFor = (doi: string | null) => cases.find((c) => c.data.doi.toLowerCase() === doi);
+---
+
+<Base title="Research" description="Computational enzymology across scales: quantum chemistry, QM/MM, molecular dynamics and enzyme design.">
+  <div class="page-head" slot="head">
+    <p class="eyebrow">Research</p>
+    <h1>Understanding enzymes well enough to redesign them</h1>
+    <p>I work on halohydrin dehalogenases, light-controlled enzymes and enzymes that build molecules on DNA. I simulate them with QM, QM/MM and MM, develop the methods those simulations need, and work with experimental collaborators who test the designs.</p>
+  </div>
+  <Scales />
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Selected work</p>
+        <h2>Papers</h2>
+        <a class="more" href="/publications/">All publications →</a>
+      </div>
+      <div class="cases">
+        {selected.map((w) => { const c = caseFor(w.doi); return <PaperCard work={w} href={c ? `/research/${c.id}/` : undefined} />; })}
+      </div>
+    </div>
+  </section>
+</Base>

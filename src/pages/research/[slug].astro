@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Structure from "../../components/Structure.astro";
+
+export async function getStaticPaths() {
+  const cases = await getCollection("research");
+  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+
+<Base title={d.short} description={d.summary}>
+  <div class="page-head" slot="head">
+    <p class="eyebrow">{d.venue} · {d.year}</p>
+    <h1>{d.short}</h1>
+    <p>{d.summary}</p>
+    <p class="meta"><span>{d.spec}</span><a href={`https://doi.org/${d.doi}`}>doi:{d.doi}</a></p>
+  </div>
+  <div class="wrap">
+    <div class:list={[d.structure ? "case-layout" : "article"]}>
+      {d.structure && <div class="sticky"><Structure {...d.structure} /></div>}
+      <article class="prose">
+        <p class="eyebrow">{d.title}</p>
+        <Content />
+        <p><a href={`https://doi.org/${d.doi}`}>Read the paper →</a></p>
+      </article>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,36 @@
+---
+import { authorParts, type Work } from "../data/pubs";
+interface Props {
+  work: Work;
+  showYear?: boolean;
+}
+const { work: w, showYear = true } = Astro.props;
+const authors = authorParts(w);
+---
+
+<div class="pub">
+  <span class="yr">{showYear ? w.year : ""}</span>
+  <div>
+    {w.url ? <a class="t" href={w.url}>{w.title}</a> : <span class="t">{w.title}</span>}
+    {
+      authors.length > 0 && (
+        <span class="au">
+          {authors.map((a, i) => (
+            <>
+              {a.me ? <b>{a.name}</b> : a.name}
+              {i < authors.length - 1 ? ", " : ""}
+            </>
+          ))}
+        </span>
+      )
+    }
+    <span class="v">
+      <em>{w.venue}</em>
+      {w.kind !== "article" && <span>{w.kind}</span>}
+      {w.doi && <span>doi:{w.doi}</span>}
+      {w.oaUrl && w.oaUrl !== w.url && <a href={w.oaUrl}>open access</a>}
+      {w.preprint && <a href={w.preprint}>preprint</a>}
+    </span>
+  </div>
+  <span class="c">{w.citations ? `${w.citations} cit.` : ""}</span>
+</div>

@@ -1,0 +1,122 @@
+[
+  {
+    "name": "mdprep",
+    "description": "",
+    "stars": 2,
+    "language": "Python",
+    "pushed": "2026-10-30",
+    "url": "https://github.com/miqueleg/mdprep"
+  },
+  {
+    "name": "EVB",
+    "description": "",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2026-07-09",
+    "url": "https://github.com/miqueleg/EVB"
+  },
+  {
+    "name": "gxtb-pymol-interface",
+    "description": "Pymol interface for running xtb and gxtb calculations",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2026-06-04",
+    "url": "https://github.com/miqueleg/gxtb-pymol-interface"
+  },
+  {
+    "name": "protonation-optimizer",
+    "description": "Histidine Protonation State Optimizer for setting up MD simulations based on semi-empirical QM resonance",
+    "stars": 20,
+    "language": "Python",
+    "pushed": "2026-03-06",
+    "url": "https://github.com/miqueleg/protonation-optimizer"
+  },
+  {
+    "name": "QMMESP",
+    "description": "Computing RESP charges of ligands in the local enviroment using QMMM",
+    "stars": 8,
+    "language": "Python",
+    "pushed": "2026-01-28",
+    "url": "https://github.com/miqueleg/QMMESP"
+  },
+  {
+    "name": "MLatom-ORCA-interface",
+    "description": "My MLatom-ORCa interface for cluster-model calculations.",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2026-01-15",
+    "url": "https://github.com/miqueleg/MLatom-ORCA-interface"
+  },
+  {
+    "name": "ala2_metaD_Girsanov",
+    "description": "Data and scripts for my initial test using girsanov reweighting ",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2025-11-17",
+    "url": "https://github.com/miqueleg/ala2_metaD_Girsanov"
+  },
+  {
+    "name": "MDTunnel",
+    "description": "",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2025-09-03",
+    "url": "https://github.com/miqueleg/MDTunnel"
+  },
+  {
+    "name": "LB-Caverdock_clone",
+    "description": "Try at making my own CaverDock LB calculations using Vina for further tests",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2025-08-28",
+    "url": "https://github.com/miqueleg/LB-Caverdock_clone"
+  },
+  {
+    "name": "MLatom-Sella-TS-search",
+    "description": "TS search using MLatom as calculator and Sella as optimizer. This allows for precise TS search, using analytical hessian calculation and allows for constraints (fixed atoms) using ASE",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2025-08-14",
+    "url": "https://github.com/miqueleg/MLatom-Sella-TS-search"
+  },
+  {
+    "name": "ABPy_contributions",
+    "description": "Running dockings from the notebook enviroment",
+    "stars": 0,
+    "language": "Jupyter Notebook",
+    "pushed": "2022-08-26",
+    "url": "https://github.com/miqueleg/ABPy_contributions"
+  },
+  {
+    "name": "cuda-tSNE_problem",
+    "description": "",
+    "stars": 0,
+    "language": "HTML",
+    "pushed": "2018-10-05",
+    "url": "https://github.com/miqueleg/cuda-tSNE_problem"
+  },
+  {
+    "name": "BandProfiler",
+    "description": "Python program to calculate the intensity of multiple parts of a SDS-PAGE gel, acrilamide gel,inmunodetection membranes, etc",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2018-07-03",
+    "url": "https://github.com/miqueleg/BandProfiler"
+  },
+  {
+    "name": "compbiolab_v0.1.4",
+    "description": "compbiolab Python module v0.1.5",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2017-12-21",
+    "url": "https://github.com/miqueleg/compbiolab_v0.1.4"
+  },
+  {
+    "name": "compbiolab",
+    "description": "compbiolab Python module",
+    "stars": 0,
+    "language": "Python",
+    "pushed": "2017-10-25",
+    "url": "https://github.com/miqueleg/compbiolab"
+  }
+]

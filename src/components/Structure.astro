@@ -1,0 +1,54 @@
+---
+// Rotatable structure for case-study pages. Files are pre-trimmed with
+// scripts/data/trim_pdb.py and served from public/data/structures/.
+interface Props {
+  pdb: string;
+  highlight?: number[];
+  accent?: number[];
+  caption: string;
+}
+const { pdb, highlight = [], accent = [], caption } = Astro.props;
+---
+
+<figure class="structure" data-file={`/data/structures/${pdb.toLowerCase()}.pdb`} data-highlight={highlight.join(",")} data-accent={accent.join(",")}>
+  <div class="mol" role="img" aria-label={`3D structure, PDB ${pdb}. ${caption}`}>
+    <div class="mol-fallback">Loading PDB {pdb}…</div>
+  </div>
+  <figcaption>
+    <a href={`https://www.rcsb.org/structure/${pdb}`}>PDB {pdb}</a> · {caption} · drag to rotate
+  </figcaption>
+</figure>
+
+<script>
+  import { createViewer, whileVisible } from "../scripts/mol";
+  import { reduceMotion } from "../scripts/theme";
+
+  for (const fig of document.querySelectorAll<HTMLElement>("figure.structure")) {
+    const el = fig.querySelector<HTMLElement>(".mol")!;
+    const list = (s?: string) => (s ? s.split(",").map(Number) : []);
+    (async () => {
+      const [v, text] = await Promise.all([createViewer(el, fig.querySelector(".mol-fallback")), fetch(fig.dataset.file!).then((r) => r.text())]);
+      if (!v) return;
+      const hl = list(fig.dataset.highlight), ac = list(fig.dataset.accent);
+      v.addModel(text, "pdb");
+      v.setStyle({}, { cartoon: { color: "#3A4760", thickness: 0.4 } });
+      v.setStyle({ chain: "A" }, { cartoon: { color: "#9DB6FF", thickness: 0.4 } });
+      const elem = (C: string) => ({ prop: "elem", map: { C, O: "#F0695E", N: "#86A6FF", S: "#E8C46A" } });
+      if (hl.length) {
+        v.setStyle({ chain: "A", resi: hl }, { cartoon: { color: "#E8EDF4", thickness: 0.4 } });
+        v.addStyle({ chain: "A", resi: hl, not: { atom: ["N", "C", "O"] } }, { stick: { radius: 0.22, colorscheme: elem("#E8EDF4") } });
+      }
+      if (ac.length) v.addStyle({ chain: "A", resi: ac, not: { atom: ["N", "C", "O"] } }, { stick: { radius: 0.3, colorscheme: elem("#F0695E") } });
+      v.setStyle({ hetflag: true }, { stick: { radius: 0.22, colorscheme: elem("#F0695E") }, sphere: { scale: 0.25, colorscheme: elem("#F0695E") } });
+      v.setStyle({ resn: "CL" }, { sphere: { scale: 0.5, color: "#C7D2E2" } });
+      v.setViewStyle({ style: "outline", color: "#04060A", width: 0.03 });
+      v.zoomTo(hl.length || ac.length ? { chain: "A", resi: [...hl, ...ac] } : {});
+      v.zoom(hl.length || ac.length ? 0.45 : 1);
+      v.render();
+      if (!reduceMotion) whileVisible(el, (on) => v.spin(on ? "y" : false, 0.3));
+    })().catch(() => {
+      const fb = fig.querySelector(".mol-fallback");
+      if (fb) fb.textContent = "The 3D view could not load.";
+    });
+  }
+</script>

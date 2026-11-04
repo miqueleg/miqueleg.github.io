@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { postUrl } from "../data/blog";
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+const { posts } = Astro.props;
+const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
+---
+
+<ul class="posts">
+  {
+    posts.map((p) => (
+      <li>
+        <time datetime={p.data.date.toISOString()}>{fmt.format(p.data.date)}</time>
+        <div>
+          <a href={postUrl(p)}>{p.data.title}</a>
+          {p.data.description && <p>{p.data.description}</p>}
+          {p.data.tags.length > 0 && <div class="tags">{p.data.tags.map((t) => <span>{t}</span>)}</div>}
+        </div>
+      </li>
+    ))
+  }
+</ul>

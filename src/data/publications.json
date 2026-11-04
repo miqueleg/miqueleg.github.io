@@ -1,0 +1,246 @@
+{
+  "orcid": "0000-0002-8576-8777",
+  "updated": "2026-11-04",
+  "works": [
+    {
+      "doi": "10.1038/s41929-026-01576-x",
+      "title": "A tailored CoA ligase–N-acyltransferase cascade for on-DNA amide bond formation gives access to broad substrate scope",
+      "year": 2026,
+      "venue": "Nature Catalysis",
+      "type": "journal-article",
+      "authors": [
+        "Daniela Schaub",
+        "Alice Lessing",
+        "Fabian Meyer",
+        "Peter Stockinger",
+        "Miquel Estévez‐Gay",
+        "Michael Eichenberger",
+        "Gerlis von Haugwitz",
+        "Andreas Gloger",
+        "Jörg Scheuermann",
+        "Rebecca Buller"
+      ],
+      "me": 4,
+      "citations": 1,
+      "oaUrl": "https://www.nature.com/articles/s41929-026-01576-x.pdf",
+      "url": "https://doi.org/10.1038/s41929-026-01576-x",
+      "preprint": null,
+      "kind": "article",
+      "selected": true
+    },
+    {
+      "doi": "10.1002/anie.202518896",
+      "title": "Boosting Reversible Photocontrol of a Photoxenase by an Engineered Conformational Shift",
+      "year": 2026,
+      "venue": "Angewandte Chemie International Edition",
+      "type": "journal-article",
+      "authors": [
+        "Sabrina Mandl",
+        "Janet H. Sanchez",
+        "Miquel Estévez‐Gay",
+        "Astrid Bruckmann",
+        "Caroline Hiefinger",
+        "Sílvia Osuna",
+        "Andrea Hupfeld"
+      ],
+      "me": 2,
+      "citations": 1,
+      "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/anie.202518896",
+      "url": "https://doi.org/10.1002/anie.202518896",
+      "preprint": "https://doi.org/10.1101/2025.08.25.672088",
+      "kind": "article",
+      "selected": true
+    },
+    {
+      "doi": "10.1016/j.cbpa.2026.102697",
+      "title": "Discovery and engineering of polymerases and ligases for the synthesis of modified nucleic acids",
+      "year": 2026,
+      "venue": "Current Opinion in Chemical Biology",
+      "type": "journal-article",
+      "authors": [
+        "Sumire Honda Malca",
+        "Peter Stockinger",
+        "Miquel Estévez‐Gay",
+        "Rebecca Buller"
+      ],
+      "me": 2,
+      "citations": 1,
+      "oaUrl": "https://doi.org/10.1016/j.cbpa.2026.102697",
+      "url": "https://doi.org/10.1016/j.cbpa.2026.102697",
+      "preprint": null,
+      "kind": "review"
+    },
+    {
+      "doi": "10.1021/acscatal.5c00819",
+      "title": "Engineering of Conserved Sequence Motif 1 Residues in Halohydrin Dehalogenase HheC Simultaneously Enhances Activity, Stability, and Enantioselectivity",
+      "year": 2025,
+      "venue": "ACS Catalysis",
+      "type": "journal-article",
+      "authors": [
+        "Sophie Staar",
+        "Miquel Estévez‐Gay",
+        "Felix Kaspar",
+        "Sílvia Osuna",
+        "Anett Schallmey"
+      ],
+      "me": 1,
+      "citations": 13,
+      "oaUrl": "https://doi.org/10.1021/acscatal.5c00819",
+      "url": "https://doi.org/10.1021/acscatal.5c00819",
+      "preprint": "https://doi.org/10.26434/chemrxiv-2024-cw4cm",
+      "kind": "article",
+      "selected": true
+    },
+    {
+      "doi": "10.1021/acscatal.4c04815",
+      "title": "A Dynamic Loop in Halohydrin Dehalogenase HheG Regulates Activity and Enantioselectivity in Epoxide Ring Opening",
+      "year": 2024,
+      "venue": "ACS Catalysis",
+      "type": "journal-article",
+      "authors": [
+        "Marcel Staar",
+        "Lina Ahlborn",
+        "Miquel Estévez‐Gay",
+        "Katharina Pallasch",
+        "Sílvia Osuna",
+        "Anett Schallmey"
+      ],
+      "me": 2,
+      "citations": 10,
+      "oaUrl": "https://doi.org/10.1021/acscatal.4c04815",
+      "url": "https://doi.org/10.1021/acscatal.4c04815",
+      "preprint": "https://doi.org/10.26434/chemrxiv-2024-xm0td",
+      "kind": "article",
+      "selected": true
+    },
+    {
+      "doi": null,
+      "title": "Computational exploration and design of HHDH variants with novel synthetically useful functionalities",
+      "year": 2023,
+      "venue": "PhD thesis, Universitat de Girona",
+      "type": "dissertation-thesis",
+      "authors": [
+        "Miquel Estévez-Gay"
+      ],
+      "me": 0,
+      "citations": null,
+      "oaUrl": null,
+      "url": "https://dugi-doc.udg.edu/handle/10256/23828",
+      "preprint": null,
+      "kind": "thesis"
+    },
+    {
+      "doi": "10.1002/pro.4426",
+      "title": "Estimating conformational heterogeneity of tryptophan synthase with a template‐based Alphafold2 approach",
+      "year": 2022,
+      "venue": "Protein Science",
+      "type": "journal-article",
+      "authors": [
+        "Guillem Casadevall",
+        "Cristina Duran",
+        "Miquel Estévez‐Gay",
+        "Sílvia Osuna"
+      ],
+      "me": 2,
+      "citations": 21,
+      "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/pro.4426",
+      "url": "https://doi.org/10.1002/pro.4426",
+      "preprint": null,
+      "kind": "article",
+      "selected": true
+    },
+    {
+      "doi": "10.1111/febs.15777",
+      "title": "Insights into the molecular determinants of thermal stability in halohydrin dehalogenase HheD2",
+      "year": 2021,
+      "venue": "The FEBS Journal",
+      "type": "journal-article",
+      "authors": [
+        "Julia Wessel",
+        "Giovanna Petrillo",
+        "Miquel Estévez‐Gay",
+        "Sandra Bosch",
+        "Margarita Seeger",
+        "Willem P. Dijkman",
+        "Javier Iglesias‐Fernández",
+        "Aurélio Hidalgo",
+        "Isabel Usón",
+        "Sílvia Osuna",
+        "Anett Schallmey"
+      ],
+      "me": 2,
+      "citations": 10,
+      "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/febs.15777",
+      "url": "https://doi.org/10.1111/febs.15777",
+      "preprint": null,
+      "kind": "article"
+    },
+    {
+      "doi": "10.1021/acs.jcim.1c00122",
+      "title": "SBMOpenMM: A Builder of Structure-Based Models for OpenMM",
+      "year": 2021,
+      "venue": "Journal of Chemical Information and Modeling",
+      "type": "journal-article",
+      "authors": [
+        "Martin Floor",
+        "Kengjie Li",
+        "Miquel Estévez‐Gay",
+        "Luís Agulló",
+        "Pau Muñoz-Torres",
+        "Jenn Kang Hwang",
+        "Sílvia Osuna",
+        "Jordi Villà­-Freixa"
+      ],
+      "me": 2,
+      "citations": 4,
+      "oaUrl": "https://chemrxiv.org/engage/api-gateway/chemrxiv/assets/orp/resource/item/60cb3b65926ad0778401a757/original/sbm-open-mm-a-builder-of-structure-based-models-for-open-mm.pdf",
+      "url": "https://doi.org/10.1021/acs.jcim.1c00122",
+      "preprint": "https://doi.org/10.26434/chemrxiv.13663544.v1",
+      "kind": "article"
+    },
+    {
+      "doi": "10.3390/catal10121403",
+      "title": "Conformational Landscapes of Halohydrin Dehalogenases and Their Accessible Active Site Tunnels",
+      "year": 2020,
+      "venue": "Catalysts",
+      "type": "journal-article",
+      "authors": [
+        "Miquel Estévez‐Gay",
+        "Javier Iglesias‐Fernández",
+        "Sílvia Osuna"
+      ],
+      "me": 0,
+      "citations": 16,
+      "oaUrl": "https://www.mdpi.com/2073-4344/10/12/1403/pdf?version=1606898032",
+      "url": "https://doi.org/10.3390/catal10121403",
+      "preprint": null,
+      "kind": "article"
+    },
+    {
+      "doi": "10.1002/anie.202008339",
+      "title": "Enzyme Conformation Influences the Performance of Lipase‐powered Nanomotors",
+      "year": 2020,
+      "venue": "Angewandte Chemie International Edition",
+      "type": "journal-article",
+      "authors": [
+        "Lei Wang",
+        "Marzia Marciello",
+        "Miquel Estévez‐Gay",
+        "Paul E. D. Soto Rodriguez",
+        "Yurena Luengo",
+        "Javier Iglesias‐Fernández",
+        "Xin Chun Huang",
+        "Sílvia Osuna",
+        "Marco Filice",
+        "Samuel Sánchez"
+      ],
+      "me": 2,
+      "citations": 103,
+      "oaUrl": null,
+      "url": "https://doi.org/10.1002/anie.202008339",
+      "preprint": null,
+      "kind": "article",
+      "selected": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+---
+import { nav, site } from "../data/site";
+const path = Astro.url.pathname;
+---
+
+<nav class="site-nav" aria-label="Main">
+  <a class="wordmark" href="/">{site.name}</a>
+  <ul>
+    {
+      nav.map((item) => (
+        <li>
+          <a href={item.href} aria-current={path.startsWith(item.href) ? "page" : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+    <li><button type="button" class="theme-btn" id="theme-btn" aria-label="Colour theme: automatic">Auto</button></li>
+  </ul>
+</nav>
+
+<script>
+  const btn = document.getElementById("theme-btn")!;
+  const order = ["auto", "light", "dark"] as const;
+  const label = { auto: "Auto", light: "Light", dark: "Dark" };
+  const current = () => (document.documentElement.dataset.theme as "light" | "dark" | undefined) ?? "auto";
+  const show = () => {
+    btn.textContent = label[current()];
+    btn.setAttribute("aria-label", `Colour theme: ${current() === "auto" ? "automatic" : current()}`);
+  };
+  btn.addEventListener("click", () => {
+    const next = order[(order.indexOf(current()) + 1) % order.length];
+    if (next === "auto") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = next;
+    try {
+      if (next === "auto") localStorage.removeItem("theme");
+      else localStorage.setItem("theme", next);
+    } catch {}
+    show();
+  });
+  show();
+</script>

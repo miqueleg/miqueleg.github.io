@@ -1,0 +1,17 @@
+---
+import { authorParts, venueShort, type Work } from "../data/pubs";
+interface Props {
+  work: Work;
+  href?: string;
+}
+const { work: w, href = w.url ?? "#" } = Astro.props;
+const me = authorParts(w, 99).findIndex((a) => a.me);
+const position = me === 0 ? "First author" : me === w.authors.length - 1 ? "Last author" : `Author ${me + 1} of ${w.authors.length}`;
+---
+
+<article class="case">
+  <p class="venue mono">{venueShort(w.venue)} · {w.year}</p>
+  <h3><a href={href}>{w.title}</a></h3>
+  <p class="sum">{position}{w.citations ? ` · cited ${w.citations}×` : ""}</p>
+  <p class="spec">{w.doi}</p>
+</article>
