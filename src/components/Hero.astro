@@ -1,0 +1,94 @@
+---
+import { site } from "../data/site";
+---
+
+<div class="hero">
+  <div>
+    <p class="eyebrow">Computational enzymology · {site.lab.name}, University of Bern</p>
+    <h1>
+      <span class="small">From</span>{" "}<span class="w e">electrons<sup>10⁻¹⁰ m</sup></span><br /><span class="small">to</span>{" "}<span
+        class="w z">enzymes<sup>10⁻⁸ m</sup></span>
+    </h1>
+    <p class="lede">
+      I simulate enzymes at every scale, from quantum chemistry and QM/MM to molecular dynamics, and use what the simulations show to
+      redesign them.
+    </p>
+    <div class="cta">
+      <a class="btn" href="#scales">Follow the scales ↓</a>
+      <a class="btn ghost" href="/tools/">Open-source tools</a>
+    </div>
+  </div>
+  <figure class="mol-fig">
+    <div class="mol" id="hero-mol" role="img" aria-label="3D cartoon of the halohydrin dehalogenase HheC dimer with its catalytic triad and bound (R)-styrene oxide, gently flexing">
+      <div class="mol-fallback" id="hero-fallback">Loading HheC…</div>
+    </div>
+    <figcaption class="mono">
+      <span><b>HheC</b> · PDB 1PWZ · (R)-styrene oxide + Cl⁻ · Ser132 / Tyr145 / Arg149</span>
+      <span>Motion: lowest elastic-network mode · drag to rotate</span>
+    </figcaption>
+  </figure>
+</div>
+<dl class="timeline">
+  <div><dt>Now</dt><dd>{site.role}, {site.lab.name} · Bern</dd></div>
+  <div><dt>Before</dt><dd>Lab manager, Osuna Lab · Girona</dd></div>
+  <div><dt>PhD 2023</dt><dd>Bioinformatics, Universitat de Girona</dd></div>
+</dl>
+
+<script>
+  import { createViewer, whileVisible } from "../scripts/mol";
+  import { reduceMotion } from "../scripts/theme";
+
+  const el = document.getElementById("hero-mol")!;
+  const fallback = document.getElementById("hero-fallback");
+
+  // Build a breathing trajectory along the ANM mode, then hand it to 3Dmol as frames.
+  async function start() {
+    const [v, data] = await Promise.all([createViewer(el, fallback), fetch("/data/hhec.json").then((r) => r.json())]);
+    if (!v) return;
+    const lines: string[] = data.pdb.split("\n");
+    const head = lines.filter((l) => l.startsWith("HELIX") || l.startsWith("SHEET")).join("\n");
+    const atoms = lines.filter((l) => l.startsWith("ATOM") || l.startsWith("HETATM"));
+    const base = atoms.map((l) => [l.slice(30, 38), l.slice(38, 46), l.slice(46, 54)].map(parseFloat));
+    const f8 = (x: number) => x.toFixed(3).padStart(8, " ");
+    const NF = reduceMotion ? 1 : 24, AMP = 1.8;
+    let pdb = head + "\n";
+    for (let f = 0; f < NF; f++) {
+      const s = AMP * Math.sin((2 * Math.PI * f) / NF);
+      pdb += `MODEL     ${String(f + 1).padStart(4, " ")}\n`;
+      for (let i = 0; i < atoms.length; i++) {
+        const d = data.disp, b = base[i];
+        pdb += atoms[i].slice(0, 30) + f8(b[0] + s * d[3 * i]) + f8(b[1] + s * d[3 * i + 1]) + f8(b[2] + s * d[3 * i + 2]) + atoms[i].slice(54) + "\n";
+      }
+      pdb += "ENDMDL\n";
+    }
+    v.addModelsAsFrames(pdb, "pdb");
+    v.setStyle({ chain: "A" }, { cartoon: { color: "#9DB6FF", thickness: 0.5 } });
+    v.setStyle({ chain: "B" }, { cartoon: { color: "#4B5A78", thickness: 0.5 } });
+    const elem = (C: string, O: string, N = "#86A6FF") => ({ prop: "elem", map: { C, O, N } });
+    v.addStyle({ resi: [132, 145, 149], not: { atom: ["N", "C", "O"] } }, { stick: { radius: 0.24, colorscheme: elem("#E8EDF4", "#F0695E") } });
+    v.setStyle({ resn: "RSO" }, { stick: { radius: 0.22, colorscheme: elem("#F0695E", "#FFFFFF") }, sphere: { scale: 0.28, colorscheme: elem("#F0695E", "#FFFFFF") } });
+    v.setStyle({ resn: "CL" }, { sphere: { scale: 0.55, color: "#C7D2E2" } });
+    v.setViewStyle({ style: "outline", color: "#04060A", width: 0.035 });
+    v.zoomTo();
+    v.rotate(-70, "x");
+    v.rotate(20, "y");
+    v.zoom(1.12);
+    v.render();
+    if (reduceMotion) return;
+    let on = false;
+    whileVisible(el, (yes) => {
+      if (yes === on) return;
+      on = yes;
+      if (yes) {
+        v.animate({ loop: "forward", interval: 75 });
+        v.spin("y", 0.35);
+      } else {
+        v.stopAnimate();
+        v.spin(false);
+      }
+    });
+  }
+  start().catch(() => {
+    if (fallback) fallback.textContent = "The 3D view could not load.";
+  });
+</script>

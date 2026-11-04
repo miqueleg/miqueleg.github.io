@@ -1,0 +1,42 @@
+{
+  "_readme": "Hand edits applied on top of ORCID + OpenAlex. Key = lowercase DOI (or the normalised title for works without one). Any field can be overridden; \"hide\": true drops a work. \"selected\": true puts a work on the homepage.",
+  "works": {
+    "10.1016/j.cbpa.2026.102697": {
+      "kind": "review"
+    },
+    "computational exploration and design of hhdh variants with novel synthetically useful functionalities": {
+      "venue": "PhD thesis, Universitat de Girona",
+      "authors": [
+        "Miquel Estévez-Gay"
+      ],
+      "me": 0
+    },
+    "10.1111/febs.15777": {
+      "venue": "The FEBS Journal"
+    },
+    "10.17504/protocols.io.5jyl82w47l2w/v1": {
+      "hide": true
+    },
+    "10.17504/protocols.io.j8nlk86z1l5r/v1": {
+      "hide": true
+    },
+    "10.1038/s41929-026-01576-x": {
+      "selected": true
+    },
+    "10.1002/anie.202518896": {
+      "selected": true
+    },
+    "10.1021/acscatal.5c00819": {
+      "selected": true
+    },
+    "10.1021/acscatal.4c04815": {
+      "selected": true
+    },
+    "10.1002/pro.4426": {
+      "selected": true
+    },
+    "10.1002/anie.202008339": {
+      "selected": true
+    }
+  }
+}

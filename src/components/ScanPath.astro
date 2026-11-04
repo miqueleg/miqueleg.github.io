@@ -1,0 +1,161 @@
+---
+// Plays a real relaxed-scan trajectory (built by scripts/data/scan_to_json.py):
+// 3D view of the cluster model locked to its energy profile.
+interface Props {
+  src?: string;
+}
+const { src = "/data/scan-path.json" } = Astro.props;
+---
+
+<div class="scanpath" data-src={src}>
+  <div class="mol" role="img" aria-label="Ball-and-stick cluster model of the active site: cyanide approaches the epoxide, the epoxide ring opens and the tyrosine passes its proton to the epoxide oxygen">
+    <div class="mol-fallback">Loading the scan…</div>
+  </div>
+  <div class="legend" aria-hidden="true">
+    <span><i style="background:var(--neg)"></i>cyanide</span>
+    <span><i style="background:#E8EDF4;box-shadow:0 0 0 1px var(--ink-3)"></i>epoxide</span>
+    <span><i style="background:var(--pos)"></i>Tyr / Arg proton relay</span>
+    <span>dashed: scanned C···C distance</span>
+  </div>
+  <canvas class="plot" aria-label="Energy along the scan; click or drag to move through it"></canvas>
+  <div class="controls">
+    <button type="button" class="play" aria-pressed="true">Pause</button>
+    <input type="range" min="0" max="1" value="0" step="1" aria-label="Frame along the scan" />
+  </div>
+  <p class="readout" aria-live="off">Loading…</p>
+</div>
+
+<script>
+  import { createViewer } from "../scripts/mol";
+  import { T, font, panel, reduceMotion } from "../scripts/theme";
+
+  type Scan = {
+    elements: string[];
+    frames: number[][];
+    energy: number[];
+    scanSteps: number;
+    scanned: [number, number];
+    track: Record<"cc" | "co" | "oh", number[]>;
+    atoms: Record<"nucleophile" | "epoxide" | "tyr" | "arg", number[]>;
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>(".scanpath")) init(root);
+
+  async function init(root: HTMLElement) {
+    const molEl = root.querySelector<HTMLElement>(".mol")!;
+    const fallback = root.querySelector<HTMLElement>(".mol-fallback");
+    const plot = root.querySelector<HTMLCanvasElement>("canvas.plot")!;
+    const slider = root.querySelector<HTMLInputElement>("input[type=range]")!;
+    const btn = root.querySelector<HTMLButtonElement>("button.play")!;
+    const ro = root.querySelector<HTMLElement>(".readout")!;
+
+    const data: Scan = await fetch(root.dataset.src!).then((r) => r.json());
+    const n = data.frames.length, k0 = data.scanSteps - 1; // frames 0..k0-1 are converged scan steps
+    slider.max = String(n - 1);
+    const emin = Math.min(...data.energy), emax = Math.max(...data.energy);
+
+    let i = 0, playing = !reduceMotion, dir = 1, lastStep = 0, hold = 0, viewer: any = null;
+    const setPlaying = (p: boolean) => {
+      playing = p;
+      btn.textContent = p ? "Pause" : "Play";
+      btn.setAttribute("aria-pressed", String(p));
+      if (p) P.kick();
+    };
+    btn.addEventListener("click", () => setPlaying(!playing));
+    slider.addEventListener("input", () => { setPlaying(false); go(+slider.value); });
+
+    const dashed = (f: number) => {
+      const [a, b] = data.scanned;
+      const c = data.frames[f], p = (j: number) => ({ x: c[3 * j], y: c[3 * j + 1], z: c[3 * j + 2] });
+      viewer.removeAllShapes();
+      viewer.addCylinder({ start: p(a), end: p(b), radius: 0.045, color: "#F0695E", dashed: true, dashLength: 0.18, gapLength: 0.14, fromCap: 1, toCap: 1 });
+    };
+    // fromLoop: called by the panel's own animation frame, which keeps itself running
+    function go(f: number, fromLoop = false) {
+      i = Math.max(0, Math.min(n - 1, f));
+      slider.value = String(i);
+      if (viewer) {
+        viewer.setFrame(i);
+        dashed(i);
+        viewer.render();
+      }
+      const step = i < k0 ? `scan step ${i + 1} of ${data.scanSteps}` : `step ${data.scanSteps}, relaxing`;
+      const e = data.energy[i];
+      ro.textContent = `${step} · C···C ${data.track.cc[i].toFixed(2)} Å · epoxide C–O ${data.track.co[i].toFixed(2)} Å · O···H(Tyr) ${data.track.oh[i].toFixed(2)} Å · ΔE ${(e < 0 ? "−" : "+") + Math.abs(e).toFixed(1)} kcal/mol`;
+      if (!fromLoop) P.kick();
+    }
+
+    // energy profile; also the clock that advances the trajectory
+    const m = { l: 40, r: 12, t: 14, b: 22 };
+    const P = panel(plot, (ctx, w, h, t) => {
+      if (playing && t - lastStep > 0.11) {
+        lastStep = t;
+        if (hold > 0) hold--;
+        else {
+          let next = i + dir;
+          if (next >= n || next < 0) { dir = -dir; hold = 10; next = i; }
+          if (next !== i) go(next, true);
+        }
+      }
+      const X = (k: number) => m.l + (k / (n - 1)) * (w - m.l - m.r);
+      const pad = (emax - emin) * 0.08;
+      const Y = (e: number) => m.t + ((emax + pad - e) / (emax - emin + 2 * pad)) * (h - m.t - m.b);
+      ctx.fillStyle = T.card;
+      ctx.fillRect(0, 0, w, h);
+      // shade the final, relaxing step
+      ctx.fillStyle = T.paper2;
+      ctx.fillRect(X(k0 - 0.5), m.t, X(n - 1) - X(k0 - 0.5), h - m.t - m.b);
+      ctx.font = font(10);
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "right";
+      for (const e of [0, -10, -20]) {
+        if (e < emin - pad || e > emax + pad) continue;
+        ctx.strokeStyle = T.rule; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(m.l, Y(e)); ctx.lineTo(w - m.r, Y(e)); ctx.stroke();
+        ctx.fillStyle = T.ink3; ctx.fillText(String(e).replace("-", "−"), m.l - 6, Y(e));
+      }
+      ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+      // shorter labels when the panel is narrow
+      const fit = (long: string, short: string, room: number) => (ctx.measureText(long).width <= room ? long : short);
+      ctx.fillText(fit(`scan steps 1–${data.scanSteps - 1}`, "scan", X(k0 - 0.5) - X(0) - 4), X(0), h - 6);
+      ctx.fillText(fit(`step ${data.scanSteps}: C···C held, geometry relaxes →`, `step ${data.scanSteps} relaxes →`, w - m.r - X(k0) - 4), X(k0) + 4, h - 6);
+      ctx.save(); ctx.translate(11, m.t + (h - m.t - m.b) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = "center"; ctx.fillText("kcal/mol", 0, 0); ctx.restore();
+      ctx.beginPath();
+      data.energy.forEach((e, k) => (k ? ctx.lineTo(X(k), Y(e)) : ctx.moveTo(X(k), Y(e))));
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 1.8; ctx.lineJoin = "round"; ctx.stroke();
+      for (let k = 0; k < k0; k++) { ctx.fillStyle = T.ink; ctx.beginPath(); ctx.arc(X(k), Y(data.energy[k]), 2.2, 0, 7); ctx.fill(); }
+      ctx.fillStyle = data.energy[i] > 1 ? T.neg : T.pos;
+      ctx.beginPath(); ctx.arc(X(i), Y(data.energy[i]), 5.5, 0, 7); ctx.fill();
+      ctx.strokeStyle = T.card; ctx.lineWidth = 2; ctx.stroke();
+    });
+    const pick = (ev: PointerEvent) => {
+      const r = plot.getBoundingClientRect();
+      const u = (ev.clientX - r.left - m.l) / (r.width - m.l - m.r);
+      setPlaying(false);
+      go(Math.round(u * (n - 1)));
+    };
+    plot.addEventListener("pointerdown", (ev) => { plot.setPointerCapture(ev.pointerId); pick(ev); });
+    plot.addEventListener("pointermove", (ev) => { if (plot.hasPointerCapture(ev.pointerId)) pick(ev); });
+    if (reduceMotion) setPlaying(false);
+
+    // 3D view
+    viewer = await createViewer(molEl, fallback);
+    if (!viewer) { go(i); return; }
+    let xyz = "";
+    for (const c of data.frames) {
+      xyz += `${data.elements.length}\n\n`;
+      data.elements.forEach((el, j) => (xyz += `${el} ${c[3 * j]} ${c[3 * j + 1]} ${c[3 * j + 2]}\n`));
+    }
+    viewer.addModelsAsFrames(xyz, "xyz");
+    const scheme = (map: Record<string, string>) => ({ colorscheme: { prop: "elem", map } });
+    viewer.setStyle({}, { stick: { radius: 0.09, ...scheme({ C: "#4E5A6E", H: "#7D899C", O: "#9C4F4A", N: "#4F669C" }) } });
+    const hot = scheme({ C: "#E8EDF4", H: "#FFFFFF", O: "#E8EDF4", N: "#E8EDF4" });
+    viewer.setStyle({ index: data.atoms.epoxide }, { stick: { radius: 0.17, ...hot }, sphere: { scale: 0.27, ...hot } });
+    viewer.setStyle({ index: [...data.atoms.tyr, ...data.atoms.arg] }, { stick: { radius: 0.15, color: "#86A6FF" }, sphere: { scale: 0.24, color: "#86A6FF" } });
+    viewer.setStyle({ index: data.atoms.nucleophile }, { stick: { radius: 0.17, color: "#F0695E" }, sphere: { scale: 0.3, color: "#F0695E" } });
+    viewer.setViewStyle({ style: "outline", color: "#04060A", width: 0.03 });
+    viewer.zoomTo({ index: [...data.atoms.nucleophile, ...data.atoms.epoxide, ...data.atoms.tyr, ...data.atoms.arg] });
+    viewer.zoom(0.8);
+    go(i);
+  }
+</script>

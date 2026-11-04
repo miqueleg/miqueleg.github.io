@@ -1,0 +1,19 @@
+---
+import Base from "../../layouts/Base.astro";
+import PostList from "../../components/PostList.astro";
+import { getPosts } from "../../data/blog";
+const posts = await getPosts();
+---
+
+<Base title="Blog" description="Notes on computational chemistry tools and workflows by Miquel Estévez-Gay.">
+  <div class="page-head" slot="head">
+    <p class="eyebrow">Blog</p>
+    <h1>Notes from the terminal</h1>
+    <p>Write-ups of the tools I release and the workflows behind them. <a href="/feed.xml">RSS feed</a>.</p>
+  </div>
+  <section class="block">
+    <div class="wrap">
+      <PostList posts={posts} />
+    </div>
+  </section>
+</Base>

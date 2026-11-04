@@ -1,0 +1,356 @@
+---
+import ScanPath from "./ScanPath.astro";
+---
+
+<section class="block" id="scales">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Research</p>
+      <h2>Five scales, one enzyme</h2>
+      <p>
+        Each method answers a question the others can't. The ruler on the left tracks length and time; the panels on the right run live
+        in your browser. Panels marked <span class="kind real">real data</span> play my own calculations; the others are schematics of
+        the method.
+      </p>
+    </div>
+    <ol class="scales">
+      <li class="scale">
+        <div class="ruler"><span class="len">1 Å</span><span class="time">fs</span><span class="n">10–100 atoms</span></div>
+        <div class="scale-copy">
+          <h3>Electrons</h3>
+          <p class="method mono">DFT · xTB / g-xTB · ML potentials (AIQM2, MACE, UMA)</p>
+          <p class="q">Where are the electrons, and where do they go when a bond breaks?</p>
+          <p class="body-s">Semi-empirical and machine-learned potentials make it cheap enough to scan, optimise and search for transition states on hundreds of atoms, then check the key points with DFT.</p>
+          <p class="links"><a href="https://github.com/miqueleg/gxtb-pymol-interface">gxtb-pymol-interface</a><a href="https://github.com/miqueleg/MLatom-Sella-TS-search">MLatom-Sella-TS-search</a></p>
+        </div>
+        <figure class="vis">
+          <span class="kind">Schematic</span>
+          <canvas class="panel" id="cv-orb" aria-label="Animated contour plot of two orbitals mixing, positive phase in blue and negative in red"></canvas>
+          <figcaption><span>ψ = cos θ · π + sin θ · π* on a C–O bond</span><span><span style="color:var(--pos)">■</span> ψ &gt; 0 &nbsp;<span style="color:var(--neg)">■</span> ψ &lt; 0</span></figcaption>
+          <p class="readout" id="ro-orb">θ = 0°</p>
+        </figure>
+      </li>
+
+      <li class="scale">
+        <div class="ruler"><span class="len">10 Å</span><span class="time">fs–ps</span><span class="n">100–400 atoms</span></div>
+        <div class="scale-copy">
+          <h3>Active site</h3>
+          <p class="method mono">QM cluster models · relaxed scans · TS search (Sella) · EVB</p>
+          <p class="q">What does the reaction look like at the atomic level, and what does it cost?</p>
+          <p class="body-s">
+            A 303-atom cluster model of a halohydrin dehalogenase active site, computed with AIQM2 through ORCA. Cyanide is pulled towards the
+            epoxide carbon one step at a time. At the last step the epoxide C–O bond breaks and the catalytic tyrosine hands its proton to the
+            leaving oxygen, while the arginine re-protonates the tyrosine.
+          </p>
+          <p class="links"><a href="https://github.com/miqueleg/MLatom-ORCA-interface">MLatom-ORCA-interface</a><a href="/blog/2025/AIQM2-ORCA-Sella/">How the scan was run</a></p>
+        </div>
+        <figure class="vis">
+          <span class="kind real">Real data · 85 of 303 atoms shown</span>
+          <ScanPath />
+        </figure>
+      </li>
+
+      <li class="scale">
+        <div class="ruler"><span class="len">30 Å</span><span class="time">ps</span><span class="n">10⁴ atoms</span></div>
+        <div class="scale-copy">
+          <h3>Protein environment</h3>
+          <p class="method mono">QM/MM electrostatic embedding · environment-aware RESP</p>
+          <p class="q">How does the enzyme polarise the substrate before anything reacts?</p>
+          <p class="body-s">Charges fitted in the gas phase miss the field of the protein. Fitting them inside the enzyme, with the protein as point charges, gives ligand parameters that match where the ligand actually sits.</p>
+          <p class="links"><a href="https://github.com/miqueleg/QMMESP">QMMESP</a><a href="https://github.com/miqueleg/protonation-optimizer">protonation-optimizer</a></p>
+        </div>
+        <figure class="vis">
+          <span class="kind">Schematic · illustrative charges</span>
+          <div class="seg" role="group" aria-label="Charge model">
+            <button type="button" id="b-gas" aria-pressed="false">Gas phase</button>
+            <button type="button" id="b-env" aria-pressed="true">Inside HheC</button>
+          </div>
+          <canvas class="panel" id="cv-esp" aria-label="Styrene oxide atoms coloured by partial charge, surrounded by protein point charges"></canvas>
+          <div class="cbar"><span>−0.6 e</span><i></i><span>+0.6 e</span></div>
+          <p class="readout" id="ro-esp">q(O) = −0.58 e</p>
+        </figure>
+      </li>
+
+      <li class="scale">
+        <div class="ruler"><span class="len">100 Å</span><span class="time">ns–µs</span><span class="n">10⁵ atoms</span></div>
+        <div class="scale-copy">
+          <h3>Dynamics</h3>
+          <p class="method mono">MD (OpenMM, Amber) · enhanced sampling · MSMs · tunnel analysis</p>
+          <p class="q">Which conformations does the enzyme visit, and which ones are active?</p>
+          <p class="body-s">Long simulations, projected onto a few collective variables, show which states an enzyme samples and how mutations shift the balance, such as the flexible N-terminal loop that controls HheG's activity and enantioselectivity.</p>
+          <p class="links"><a href="https://github.com/miqueleg/MDTunnel">MDTunnel</a><a href="https://doi.org/10.1021/acscatal.4c04815">HheG loop paper</a></p>
+        </div>
+        <figure class="vis">
+          <span class="kind">Schematic · toy landscape</span>
+          <canvas class="panel" id="cv-fes" aria-label="Free-energy landscape heat map with a particle performing Langevin dynamics between basins"></canvas>
+          <div class="cbar seq"><span>0</span><i></i><span>8 kcal/mol</span></div>
+          <p class="readout" id="ro-fes">Live Langevin dynamics at 300 K</p>
+        </figure>
+      </li>
+
+      <li class="scale">
+        <div class="ruler"><span class="len">20<sup>N</sup></span><span class="time">sequence space</span><span class="n">N = 254 residues</span></div>
+        <div class="scale-copy">
+          <h3>Design</h3>
+          <p class="method mono">AlphaFold ensembles · LigandMPNN · BindCraft · Boltz-2</p>
+          <p class="q">Which positions should we change, and to what?</p>
+          <p class="body-s">Simulations point to the residues that matter; design tools and the lab test what to put there. In HheC, the single change F12Y in sequence motif 1 raised specific activity up to 5-fold and the apparent melting temperature by 10 K.</p>
+          <p class="links"><a href="https://doi.org/10.1021/acscatal.5c00819">HheC motif 1 paper</a><a href="https://doi.org/10.1002/pro.4426">AlphaFold2 ensembles paper</a></p>
+        </div>
+        <figure class="vis">
+          <span class="kind real">Real sequence · HheC</span>
+          <div class="seqbox" id="seq" aria-label="HheC amino-acid sequence with the catalytic triad and position 12 highlighted"></div>
+          <figcaption><span>HheC, chain A of PDB 1PWZ</span><span><span style="color:var(--pos)">■</span> S132 · Y145 · R149 &nbsp;<span style="color:var(--ink)">■</span> F12</span></figcaption>
+          <p class="readout" id="ro-seq">In-silico scan</p>
+        </figure>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<script>
+  import { T, diverge, font, hex, mix, onTheme, panel, reduceMotion, rgb } from "../scripts/theme";
+  const $ = <E extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as E;
+
+  /* ---------- 1. orbital contours (marching squares) ---------- */
+  {
+    const NX = 120, NY = 80, X0 = -3, X1 = 3, Y0 = -2, Y1 = 2;
+    const field = new Float32Array(NX * NY);
+    const off = document.createElement("canvas");
+    off.width = NX; off.height = NY;
+    const octx = off.getContext("2d")!, img = octx.createImageData(NX, NY);
+    const ro = $("ro-orb");
+    const lobes = [[-0.7, 0.55], [0.7, 0.55], [-0.7, -0.55], [0.7, -0.55]];
+    const sA = [1, 1, -1, -1], sB = [1, -1, -1, 1];
+    const g = (x: number, y: number, c: number[]) => Math.exp(-((x - c[0]) ** 2 + (y - c[1]) ** 2) / 0.32);
+    const seg = [null, [3, 2], [2, 1], [3, 1], [0, 1], [0, 1, 3, 2], [0, 2], [3, 0], [3, 0], [0, 2], [3, 0, 2, 1], [0, 1], [3, 1], [2, 1], [3, 2], null];
+    panel($<HTMLCanvasElement>("cv-orb"), (ctx, w, h, t) => {
+      const th = reduceMotion ? 0.6 : ((Math.sin(t * 0.55) * 0.5 + 0.5) * Math.PI) / 2;
+      const rot = reduceMotion ? 0 : Math.sin(t * 0.21) * 0.25, cr = Math.cos(rot), sr = Math.sin(rot);
+      const a = Math.cos(th), b = Math.sin(th);
+      for (let j = 0; j < NY; j++)
+        for (let i = 0; i < NX; i++) {
+          const x0 = X0 + ((X1 - X0) * i) / (NX - 1), y0 = Y0 + ((Y1 - Y0) * j) / (NY - 1);
+          const x = x0 * cr + y0 * sr, y = -x0 * sr + y0 * cr;
+          let v = 0;
+          for (let k = 0; k < 4; k++) v += (a * sA[k] + b * sB[k]) * g(x, y, lobes[k]);
+          field[j * NX + i] = v;
+        }
+      const pc = hex(T.pos), nc = hex(T.neg), bg = hex(T.card);
+      for (let p = 0; p < NX * NY; p++) {
+        const v = field[p], c = mix(bg, v > 0 ? pc : nc, Math.min(1, Math.abs(v)) * 0.35);
+        img.data[p * 4] = c[0]; img.data[p * 4 + 1] = c[1]; img.data[p * 4 + 2] = c[2]; img.data[p * 4 + 3] = 255;
+      }
+      octx.putImageData(img, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off, 0, 0, w, h);
+      const sx = w / (NX - 1), sy = h / (NY - 1);
+      for (const L of [-0.75, -0.5, -0.25, 0.25, 0.5, 0.75]) {
+        ctx.beginPath();
+        for (let j = 0; j < NY - 1; j++)
+          for (let i = 0; i < NX - 1; i++) {
+            const A = field[j * NX + i], B = field[j * NX + i + 1], C = field[(j + 1) * NX + i + 1], D = field[(j + 1) * NX + i];
+            const s = seg[(+(A > L) << 3) | (+(B > L) << 2) | (+(C > L) << 1) | +(D > L)];
+            if (!s) continue;
+            const pt = (e: number) => (e === 0 ? [i + (L - A) / (B - A), j] : e === 1 ? [i + 1, j + (L - B) / (C - B)] : e === 2 ? [i + (L - D) / (C - D), j + 1] : [i, j + (L - A) / (D - A)]);
+            for (let q = 0; q < s.length; q += 2) {
+              const p1 = pt(s[q]), p2 = pt(s[q + 1]);
+              ctx.moveTo(p1[0] * sx, p1[1] * sy);
+              ctx.lineTo(p2[0] * sx, p2[1] * sy);
+            }
+          }
+        ctx.strokeStyle = L > 0 ? T.pos : T.neg;
+        ctx.globalAlpha = 0.35 + Math.abs(L) * 0.8;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      const toPx = (x: number, y: number) => { const xr = x * cr - y * sr, yr = x * sr + y * cr; return [((xr - X0) / (X1 - X0)) * w, ((yr - Y0) / (Y1 - Y0)) * h]; };
+      const C = toPx(-0.7, 0), O = toPx(0.7, 0);
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(C[0], C[1]); ctx.lineTo(O[0], O[1]); ctx.stroke();
+      for (const [p, l] of [[C, "C"], [O, "O"]] as const) {
+        ctx.fillStyle = T.card; ctx.beginPath(); ctx.arc(p[0], p[1], 11, 0, 7); ctx.fill();
+        ctx.strokeStyle = T.ink; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.fillStyle = T.ink; ctx.font = font(11); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(l, p[0], p[1] + 0.5);
+      }
+      ro.textContent = `θ = ${((th * 180) / Math.PI).toFixed(0).padStart(2, " ")}°  ·  c(π) = ${a.toFixed(2)}  ·  c(π*) = ${b.toFixed(2)}`;
+    });
+  }
+
+  /* ---------- 3. QM/MM polarisation ---------- */
+  {
+    // styrene oxide, 2D layout (arbitrary units); charges are illustrative
+    const atoms: [string, number, number, number, number][] = [
+      ["C", -0.4, 0, -0.04, -0.06], ["C", -0.75, 0.606, -0.1, -0.12], ["C", -1.45, 0.606, -0.11, -0.13],
+      ["C", -1.8, 0, -0.1, -0.12], ["C", -1.45, -0.606, -0.11, -0.13], ["C", -0.75, -0.606, -0.1, -0.12],
+      ["Cα", 0.3, 0, 0.12, 0.24], ["Cβ", 0.95, -0.32, 0.05, 0.12], ["O", 0.95, 0.4, -0.38, -0.58]];
+    const bonds = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [0, 6], [6, 7], [6, 8], [7, 8]];
+    // MM point charges in a shell; positive ones cluster near the epoxide O (H-bond donors)
+    let seed = 7;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const mm: number[][] = [];
+    for (let i = 0; i < 190; i++) {
+      const a = rnd() * Math.PI * 2, r = 2.4 + rnd() * 1.6;
+      const x = -0.4 + Math.cos(a) * r * 1.25, y = Math.sin(a) * r * 0.8;
+      const nearO = Math.hypot(x - 0.95, y - 0.4) < 2.2;
+      const q = (rnd() < (nearO ? 0.8 : 0.45) ? 1 : -1) * (0.2 + rnd() * 0.6);
+      mm.push([x, y, q, rnd() * 6.28]);
+    }
+    let env = true, k = 1, auto = !reduceMotion, lastSwitch = 0;
+    const bg = $("b-gas"), be = $("b-env"), ro = $("ro-esp");
+    const set = (v: boolean, user: boolean) => {
+      env = v;
+      bg.setAttribute("aria-pressed", String(!v));
+      be.setAttribute("aria-pressed", String(v));
+      if (user) { auto = false; p.kick(); }
+    };
+    bg.addEventListener("click", () => set(false, true));
+    be.addEventListener("click", () => set(true, true));
+    const p = panel($<HTMLCanvasElement>("cv-esp"), (ctx, w, h, t) => {
+      if (auto && t - lastSwitch > 4) { lastSwitch = t; set(!env, false); }
+      k += ((env ? 1 : 0) - k) * (reduceMotion ? 1 : 0.08);
+      const s = Math.min(w / 7.4, h / 4.9), cx = w / 2 + 0.35 * s, cy = h / 2;
+      const P = (x: number, y: number) => [cx + x * s, cy - y * s];
+      ctx.fillStyle = T.card; ctx.fillRect(0, 0, w, h);
+      for (const [x, y, q, ph] of mm) {
+        const j = reduceMotion ? 0 : 0.05, [px, py] = P(x + Math.sin(t * 2 + ph) * j, y + Math.cos(t * 1.7 + ph) * j);
+        ctx.globalAlpha = 0.12 + 0.75 * k;
+        ctx.fillStyle = q > 0 ? T.pos : T.neg;
+        ctx.beginPath(); ctx.arc(px, py, 1.5 + Math.abs(q) * 3, 0, 7); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      // H-bonds from Tyr145 / Ser132 to the epoxide O, fading with the environment
+      const O = P(0.95, 0.4);
+      const donors: [number[], string, number][] = [[[2.1, 1.75], "Tyr145 OH", -14], [[2.2, -0.9], "Ser132 OG", 15]];
+      ctx.font = font(10); ctx.textBaseline = "middle"; ctx.textAlign = "center";
+      for (const [[x, y], label, dy] of donors) {
+        const D = P(x, y);
+        ctx.globalAlpha = k;
+        ctx.setLineDash([3, 3]); ctx.strokeStyle = T.ink2; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(O[0], O[1]); ctx.lineTo(D[0], D[1]); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = T.pos; ctx.beginPath(); ctx.arc(D[0], D[1], 4, 0, 7); ctx.fill();
+        ctx.fillStyle = T.ink2; ctx.fillText(label, D[0], D[1] + dy);
+      }
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = T.ink2; ctx.lineWidth = 2;
+      for (const [a, b] of bonds) {
+        const A = P(atoms[a][1], atoms[a][2]), B = P(atoms[b][1], atoms[b][2]);
+        ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]); ctx.stroke();
+      }
+      for (const [el, x, y, qg, qe] of atoms) {
+        const q = qg + (qe - qg) * k, [px, py] = P(x, y), r = el === "O" ? 13 : 10;
+        ctx.fillStyle = rgb(diverge(q / 0.6)); ctx.beginPath(); ctx.arc(px, py, r, 0, 7); ctx.fill();
+        ctx.strokeStyle = T.ink; ctx.lineWidth = 1.2; ctx.stroke();
+        if (el !== "C") { ctx.fillStyle = T.ink; ctx.textAlign = "center"; ctx.font = font(10); ctx.fillText(el, px, py + 0.5); }
+      }
+      const qO = atoms[8][3] + (atoms[8][4] - atoms[8][3]) * k;
+      ro.textContent = `q(O) = ${qO.toFixed(2).replace("-", "−")} e  ·  ${env ? "electrostatic embedding, 190 MM charges" : "isolated ligand"}`;
+    });
+  }
+
+  /* ---------- 4. free-energy landscape + overdamped Langevin ---------- */
+  {
+    const B: [number, number, number, number, string][] = [[-0.75, -0.25, 5.2, 0.36, "loop closed"], [0.0, 0.42, 3.0, 0.34, "intermediate"], [0.8, 0.2, 4.6, 0.38, "loop open"]];
+    const X0 = -1.6, X1 = 1.6, Y0 = -1.05, Y1 = 1.05, kT = 0.596, D = 1, dt = 0.0004;
+    const G = (x: number, y: number) => {
+      let v = 0.9 * ((x / 1.5) ** 4 + (y / 0.95) ** 4) * 4;
+      for (const [cx, cy, d, s] of B) v -= d * Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (2 * s * s));
+      return v;
+    };
+    const dG = (x: number, y: number) => {
+      let gx = (0.9 * 4 * 4 * x ** 3) / 1.5 ** 4, gy = (0.9 * 4 * 4 * y ** 3) / 0.95 ** 4;
+      for (const [cx, cy, d, s] of B) {
+        const e = (d * Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (2 * s * s))) / (s * s);
+        gx += e * (x - cx); gy += e * (y - cy);
+      }
+      return [gx, gy];
+    };
+    const NX = 160, NY = 105;
+    let gmin = Infinity;
+    const grid = new Float32Array(NX * NY);
+    for (let j = 0; j < NY; j++)
+      for (let i = 0; i < NX; i++) {
+        const v = G(X0 + ((X1 - X0) * i) / (NX - 1), Y1 - ((Y1 - Y0) * j) / (NY - 1));
+        grid[j * NX + i] = v; gmin = Math.min(gmin, v);
+      }
+    const off = document.createElement("canvas");
+    off.width = NX; off.height = NY;
+    const octx = off.getContext("2d")!;
+    const paint = () => {
+      const img = octx.createImageData(NX, NY), lo = hex(T.pos), hi = hex(T.paper2);
+      for (let p = 0; p < NX * NY; p++) {
+        const u = Math.min(1, (grid[p] - gmin) / 8), c = mix(lo, hi, Math.pow(u, 0.7));
+        img.data.set([c[0], c[1], c[2], 255], p * 4);
+      }
+      octx.putImageData(img, 0, 0);
+    };
+    let x = -0.75, y = -0.25, state = 0, flips = 0, painted = false;
+    const trail: number[][] = [];
+    const gauss = () => { let u = 0; while (!u) u = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random()); };
+    const ro = $("ro-fes");
+    onTheme(() => (painted = false));
+    panel($<HTMLCanvasElement>("cv-fes"), (ctx, w, h) => {
+      if (!painted) { paint(); painted = true; }
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(off, 0, 0, w, h);
+      const PX = (a: number, b: number) => [((a - X0) / (X1 - X0)) * w, ((Y1 - b) / (Y1 - Y0)) * h];
+      if (!reduceMotion)
+        for (let s = 0; s < 16; s++) {
+          const [gx, gy] = dG(x, y), n = Math.sqrt(2 * D * dt);
+          x += (-D / kT) * gx * dt + n * gauss();
+          y += (-D / kT) * gy * dt + n * gauss();
+          trail.push([x, y]);
+          if (trail.length > 320) trail.shift();
+        }
+      const near = B.findIndex(([cx, cy]) => Math.hypot(x - cx, y - cy) < 0.3);
+      if ((near === 0 || near === 2) && near !== state) { if (state === 0 || state === 2) flips++; state = near; }
+      ctx.lineWidth = 1.4; ctx.lineJoin = "round";
+      for (let i = 1; i < trail.length; i++) {
+        const a = PX(trail[i - 1][0], trail[i - 1][1]), b = PX(trail[i][0], trail[i][1]);
+        ctx.globalAlpha = i / trail.length; ctx.strokeStyle = T.ink;
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      const [px, py] = PX(x, y);
+      ctx.fillStyle = T.neg; ctx.beginPath(); ctx.arc(px, py, 5.5, 0, 7); ctx.fill();
+      ctx.strokeStyle = T.card; ctx.lineWidth = 2; ctx.stroke();
+      ctx.font = font(10); ctx.textAlign = "center"; ctx.fillStyle = T.ink;
+      for (const [cx, cy, , , label] of B) { const [lx, ly] = PX(cx, cy); ctx.fillText(label, lx, ly + (cy > 0.3 ? -34 : 38)); }
+      ctx.fillStyle = T.ink2; ctx.textAlign = "left"; ctx.fillText("CV1 →", 8, h - 10);
+      ctx.save(); ctx.translate(14, 56); ctx.rotate(-Math.PI / 2); ctx.fillText("CV2 →", 0, 0); ctx.restore();
+      ro.textContent = `Live overdamped Langevin dynamics at 300 K · closed ⇄ open transitions: ${flips}`;
+    });
+  }
+
+  /* ---------- 5. sequence strip with in-silico scan ---------- */
+  {
+    const seq = "MSTAIVTNVKHFGGMGSALRLSEAGHTVACHDESFKQKDELEAFAETYPQLKPMSEQEPAELIEAVTSAYGQVDVLVSNDIFAPEFQPIDKYAVEDYRGAVEALQIRPFALVNAVASQMKKRKSGHIIFITSATPFGPWKELSTYTSARAGACTLANALSKELGEYNIPVFAIGPNYLHSEDSPYFYPTEPWKTNPEHVAHVKKVTALQRLGTQKELGELVAFLASGSCDYLTGQVFWLAGGFPMIERWPGMPE";
+    const cat = new Set([132, 145, 149]), eng = new Set([12]), box = $("seq"), cells: HTMLElement[] = [];
+    for (let g = 0; g < seq.length; g += 10) {
+      const grp = document.createElement("span");
+      grp.className = "grp"; grp.dataset.n = String(g + 1);
+      for (let i = g; i < Math.min(seq.length, g + 10); i++) {
+        const r = document.createElement("span");
+        r.className = "r" + (cat.has(i + 1) ? " cat" : eng.has(i + 1) ? " eng" : "");
+        r.textContent = seq[i]; r.title = seq[i] + (i + 1);
+        grp.appendChild(r); cells.push(r);
+      }
+      box.appendChild(grp);
+    }
+    const ro = $("ro-seq");
+    if (reduceMotion) ro.textContent = "Catalytic triad: Ser132 · Tyr145 · Arg149 · engineered: F12Y";
+    else {
+      let i = 0, vis = false;
+      new IntersectionObserver((es) => (vis = es[0].isIntersecting)).observe(box);
+      setInterval(() => {
+        if (!vis) return;
+        cells[i].classList.remove("scan");
+        i = (i + 1) % cells.length;
+        cells[i].classList.add("scan");
+        ro.textContent = `In-silico scan · position ${String(i + 1).padStart(3, " ")} · ${seq[i]} → 19 variants`;
+      }, 140);
+    }
+  }
+</script>

@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+import ToolCard from "../components/ToolCard.astro";
+import { tools, otherRepos } from "../data/tools";
+import { site } from "../data/site";
+---
+
+<Base title="Tools" description="Open-source tools for QM/MM, MD set-up and transition-state searches by Miquel Estévez-Gay.">
+  <div class="page-head" slot="head">
+    <p class="eyebrow">Open source</p>
+    <h1>Tools</h1>
+    <p>Small programs I wrote because I needed them: setting up MD, deriving charges in the protein, and running QM on enzyme active sites. All on <a href={site.links.github}>GitHub</a>.</p>
+  </div>
+  <section class="block">
+    <div class="wrap">
+      <div class="tools">
+        {tools.map((t) => <ToolCard {...t} />)}
+      </div>
+    </div>
+  </section>
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow">Also on GitHub</p></div>
+      <div class="pubs">
+        {
+          otherRepos.map((r) => (
+            <div class="pub">
+              <span class="yr">{r.pushed.slice(0, 4)}</span>
+              <div>
+                <a class="t" href={r.url}>{r.name}</a>
+                {r.description && <span class="au">{r.description}</span>}
+                <span class="v">{r.language && <em>{r.language}</em>}</span>
+              </div>
+              <span class="c">{r.stars ? `★ ${r.stars}` : ""}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

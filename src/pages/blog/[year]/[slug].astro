@@ -1,0 +1,38 @@
+---
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import { getPosts, postSlug, postUrl } from "../../../data/blog";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { year: String(post.data.date.getUTCFullYear()), slug: postSlug(post) },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const fmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" });
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <div class="page-head" slot="head">
+    <p class="eyebrow"><a href="/blog/">Blog</a></p>
+    <h1>{post.data.title}</h1>
+    <p class="meta">
+      <time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time>
+      {post.data.tags.map((t) => <span>#{t}</span>)}
+    </p>
+  </div>
+  <div class="wrap">
+    <div class="article">
+      <article class="prose">
+        <Content />
+      </article>
+      <nav class="pager" aria-label="More posts">
+        {older ? <a href={postUrl(older)}>← {older.data.title}</a> : <span />}
+        {newer ? <a href={postUrl(newer)}>{newer.data.title} →</a> : <span />}
+      </nav>
+    </div>
+  </div>
+</Base>

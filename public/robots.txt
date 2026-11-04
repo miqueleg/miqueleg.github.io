@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://miqueleg.github.io/sitemap-index.xml

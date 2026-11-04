@@ -1,0 +1,97 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import Scales from "../components/Scales.astro";
+import PaperCard from "../components/PaperCard.astro";
+import ToolCard from "../components/ToolCard.astro";
+import PubItem from "../components/PubItem.astro";
+import PostList from "../components/PostList.astro";
+import portrait from "../assets/portrait.jpg";
+import { site } from "../data/site";
+import { selected, works, updated } from "../data/pubs";
+import { tools } from "../data/tools";
+import { getPosts } from "../data/blog";
+
+const posts = (await getPosts()).slice(0, 3);
+---
+
+<Base home>
+  <Hero slot="head" />
+
+  <Scales />
+
+  <section class="block" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Selected work</p>
+        <h2>Papers</h2>
+        <a class="more" href="/publications/">All {works.length} publications →</a>
+      </div>
+      <div class="cases">
+        {selected.map((w) => <PaperCard work={w} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="tools">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Open source</p>
+        <h2>Tools I built along the way</h2>
+        <a class="more" href="/tools/">All tools →</a>
+      </div>
+      <div class="tools">
+        {tools.slice(0, 6).map((t) => <ToolCard {...t} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="pubs">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Latest publications</p>
+        <h2>Synced from ORCID</h2>
+        <p class="sync"><span><span class="dot"></span>ORCID 0000-0002-8576-8777</span><span>Citations from OpenAlex</span><span>Updated {updated}</span></p>
+      </div>
+      <div class="pubs">
+        {works.slice(0, 5).map((w) => <PubItem work={w} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="blog">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Blog</p>
+        <h2>Notes from the terminal</h2>
+        <a class="more" href="/blog/">All posts →</a>
+      </div>
+      <PostList posts={posts} />
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap about">
+      <Image src={portrait} alt={`Portrait of ${site.name}`} width={360} />
+      <div class="prose">
+        <p class="eyebrow">About</p>
+        <p>Designing proteins computationally and building my own tools to do so.</p>
+        <p>
+          Bioinformatician in the <a href={site.lab.url}>{site.lab.name}</a> at the University of Bern. Before that, PhD in Bioinformatics
+          and lab manager in the Osuna Lab at the Universitat de Girona.
+        </p>
+        <p>Plant lover; they are the main focus of my <a href={site.links.instagram}>Instagram account</a>.</p>
+      </div>
+      <dl>
+        <dt>Where</dt><dd>Bern, Switzerland · Girona, Spain</dd>
+        <dt>Email</dt><dd>{site.email}</dd>
+        <dt>CV</dt><dd><a href={site.cv}>PDF</a></dd>
+        <dt>ORCID</dt><dd><a href={site.links.orcid}>0000-0002-8576-8777</a></dd>
+        <dt>Scholar</dt><dd><a href={site.links.scholar}>Google Scholar</a></dd>
+        <dt>Code</dt><dd><a href={site.links.github}>github.com/miqueleg</a></dd>
+        <dt>LinkedIn</dt><dd><a href={site.links.linkedin}>miqueleg</a></dd>
+      </dl>
+    </div>
+  </section>
+</Base>

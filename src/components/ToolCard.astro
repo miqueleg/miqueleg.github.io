@@ -1,0 +1,20 @@
+---
+interface Props {
+  name: string;
+  url: string;
+  blurb: string;
+  stack: string;
+  stars: number;
+  post?: string;
+}
+const { name, url, blurb, stack, stars, post } = Astro.props;
+---
+
+<article class="tool">
+  <header>
+    <h3><a href={url}>{name}</a></h3>
+    <span class="stars">{stars > 0 ? `★ ${stars}` : ""}</span>
+  </header>
+  <p>{blurb}</p>
+  <p class="stack">{stack}{post && <> · <a href={post} style="position:relative;z-index:1">blog post</a></>}</p>
+</article>

@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import PubItem from "../components/PubItem.astro";
+import { works, updated, orcid, totalCitations, hIndex, peerReviewed } from "../data/pubs";
+
+const years = [...new Set(works.map((w) => w.year))].sort((a, b) => (b ?? 0) - (a ?? 0));
+---
+
+<Base title="Publications" description="Publications of Miquel Estévez-Gay, synced from ORCID with citation counts from OpenAlex.">
+  <div class="page-head" slot="head">
+    <p class="eyebrow">Publications</p>
+    <h1>Papers, preprints and thesis</h1>
+    <p>Synced every week from <a href={`https://orcid.org/${orcid}`}>ORCID</a>, with authors and citation counts from OpenAlex. Last update {updated}.</p>
+  </div>
+  <section class="block">
+    <div class="wrap">
+      <div class="stats">
+        <div><b>{peerReviewed.length}</b><span>Peer-reviewed</span></div>
+        <div><b>{totalCitations}</b><span>Citations</span></div>
+        <div><b>{hIndex}</b><span>h-index (OpenAlex)</span></div>
+        <div><b>{peerReviewed.filter((w) => w.me === 0).length}</b><span>First-author papers</span></div>
+      </div>
+      {
+        years.map((y) => (
+          <>
+            <h2 class="yr-head">{y}</h2>
+            <div class="pubs">
+              {works.filter((w) => w.year === y).map((w) => <PubItem work={w} showYear={false} />)}
+            </div>
+          </>
+        ))
+      }
+    </div>
+  </section>
+</Base>
