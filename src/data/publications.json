@@ -1,6 +1,6 @@
 {
   "orcid": "0000-0002-8576-8777",
-  "updated": "2026-11-09",
+  "updated": "2026-11-16",
   "works": [
     {
       "doi": "10.1038/s41929-026-01576-x",
@@ -21,7 +21,7 @@
         "Rebecca Buller"
       ],
       "me": 4,
-      "citations": 3,
+      "citations": 4,
       "oaUrl": "https://www.nature.com/articles/s41929-026-01576-x.pdf",
       "url": "https://doi.org/10.1038/s41929-026-01576-x",
       "preprint": null,
@@ -64,7 +64,7 @@
         "Rebecca Buller"
       ],
       "me": 2,
-      "citations": 1,
+      "citations": 4,
       "oaUrl": "https://doi.org/10.1016/j.cbpa.2026.102697",
       "url": "https://doi.org/10.1016/j.cbpa.2026.102697",
       "preprint": null,
@@ -84,7 +84,7 @@
         "Anett Schallmey"
       ],
       "me": 1,
-      "citations": 13,
+      "citations": 14,
       "oaUrl": "https://doi.org/10.1021/acscatal.5c00819",
       "url": "https://doi.org/10.1021/acscatal.5c00819",
       "preprint": "https://doi.org/10.26434/chemrxiv-2024-cw4cm",
@@ -142,7 +142,7 @@
         "Sílvia Osuna"
       ],
       "me": 2,
-      "citations": 22,
+      "citations": 23,
       "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/pro.4426",
       "url": "https://doi.org/10.1002/pro.4426",
       "preprint": null,
@@ -189,7 +189,7 @@
         "Pau Muñoz-Torres",
         "Jenn Kang Hwang",
         "Sílvia Osuna",
-        "Jordi Villà­-Freixa"
+        "Jordi Villà-Freixa"
       ],
       "me": 2,
       "citations": 5,
@@ -235,7 +235,7 @@
         "Samuel Sánchez"
       ],
       "me": 2,
-      "citations": 106,
+      "citations": 108,
       "oaUrl": "http://riull.ull.es/xmlui/handle/915/46583",
       "url": "https://doi.org/10.1002/anie.202008339",
       "preprint": null,
