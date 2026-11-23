@@ -1,6 +1,6 @@
 {
   "orcid": "0000-0002-8576-8777",
-  "updated": "2026-11-16",
+  "updated": "2026-11-23",
   "works": [
     {
       "doi": "10.1038/s41929-026-01576-x",
@@ -21,7 +21,7 @@
         "Rebecca Buller"
       ],
       "me": 4,
-      "citations": 4,
+      "citations": 5,
       "oaUrl": "https://www.nature.com/articles/s41929-026-01576-x.pdf",
       "url": "https://doi.org/10.1038/s41929-026-01576-x",
       "preprint": null,
@@ -142,7 +142,7 @@
         "Sílvia Osuna"
       ],
       "me": 2,
-      "citations": 23,
+      "citations": 26,
       "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1002/pro.4426",
       "url": "https://doi.org/10.1002/pro.4426",
       "preprint": null,
@@ -169,7 +169,7 @@
         "Anett Schallmey"
       ],
       "me": 2,
-      "citations": 11,
+      "citations": 12,
       "oaUrl": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1111/febs.15777",
       "url": "https://doi.org/10.1111/febs.15777",
       "preprint": null,
@@ -235,7 +235,7 @@
         "Samuel Sánchez"
       ],
       "me": 2,
-      "citations": 108,
+      "citations": 110,
       "oaUrl": "http://riull.ull.es/xmlui/handle/915/46583",
       "url": "https://doi.org/10.1002/anie.202008339",
       "preprint": null,
